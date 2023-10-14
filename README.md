@@ -16,3 +16,6 @@ Dalam praktikum struktur data yang saya ikuti, terdapat _module_ yang dibagi men
     - Pengubahan (update)
     - Pemindahan (swapping)
     - Pengurutan (sorting)
+
+### Tools
+Untuk mengerjakan praktikum struktur data, saya menggunakan **Visual Studio Code** sebagai Text Editor utama dan ekstensi **Extension Pack for Java**
