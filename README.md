@@ -1,1 +1,1 @@
-![cover](cover.png)
+![cover](cover-update.png)
