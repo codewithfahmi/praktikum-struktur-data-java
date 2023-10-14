@@ -91,4 +91,21 @@ public class Input {
         System.out.println("\nPush");
         mahasiswaStore.patch(this.push(this.prompt(), mahasiswaStore.subscribe()));
     }
+
+    public void run(MahasiswaStore mahasiswaStore) {
+        int inputOption = this.menus();
+        boolean continued = true;
+        while (continued) {
+            switch (inputOption) {
+                case 1 -> this.unshiftView(mahasiswaStore);
+                case 2 -> this.insertView(mahasiswaStore);
+                case 3 -> this.pushView(mahasiswaStore);
+            }
+
+            if (inputOption > 0) {
+                System.out.print("continue?");
+                continued = this.scanner.next().toLowerCase().charAt(0) == 'y';
+            }
+        }
+    }
 }

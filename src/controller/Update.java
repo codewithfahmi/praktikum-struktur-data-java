@@ -3,6 +3,7 @@ package controller;
 import java.util.Scanner;
 
 import model.Mahasiswa;
+import store.MahasiswaStore;
 
 public class Update {
   private final Scanner scanner = new Scanner(System.in);
@@ -43,5 +44,9 @@ public class Update {
       result[index] = current;
     }
     return result;
+  }
+
+  public void run(MahasiswaStore mahasiswaStore) {
+    mahasiswaStore.patch(this.update(mahasiswaStore.subscribe()));
   }
 }

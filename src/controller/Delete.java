@@ -3,6 +3,7 @@ package controller;
 import java.util.Scanner;
 
 import model.Mahasiswa;
+import store.MahasiswaStore;
 
 public class Delete {
   private final String[] menus = { "shift", "remove", "pop", "by name" };
@@ -44,5 +45,31 @@ public class Delete {
       }
     }
     return temp;
+  }
+
+  public void run(MahasiswaStore mahasiswaStore) {
+    if (mahasiswaStore.subscribe().length == 0) {
+      System.out.println("\nDelete inoperable, master record is empty");
+    } else {
+      int deleteOption = this.menus();
+      boolean continued = true;
+      while (continued) {
+        switch (deleteOption) {
+          case 1 -> mahasiswaStore.patch(this.shift(mahasiswaStore.subscribe()));
+          case 2 -> {
+            System.out.printf("%-10s : ", "Index");
+            int index = this.scanner.nextInt();
+            mahasiswaStore.patch(this.remove(mahasiswaStore.subscribe(), index));
+          }
+          case 3 -> mahasiswaStore.patch(this.pop(mahasiswaStore.subscribe()));
+        }
+        if (deleteOption > 0) {
+          System.out.print("continue?");
+          continued = this.scanner.next().toLowerCase().charAt(0) == 'y';
+        } else {
+          continued = false;
+        }
+      }
+    }
   }
 }

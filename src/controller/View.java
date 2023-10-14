@@ -3,7 +3,7 @@ package controller;
 import model.Mahasiswa;
 
 public class View {
-    public void view(Mahasiswa[] mahasiswa) {
+    public void run(Mahasiswa[] mahasiswa) {
         System.out.println("\nDaftar mahasiswa (" + mahasiswa.length + ")");
         System.out.printf("%-2s %-15s %-20s %-9s %-9s %-30s %-3s\n",
                 "",
