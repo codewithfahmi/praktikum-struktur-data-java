@@ -1,5 +1,6 @@
 ![cover](cover.png)
 
+
 ## Struktur Data
 **Struktur Data** merupakan salah satu mata kuliah wajib yang disediakan oleh kampus saya dan dalam mata kuliah ini mahasiswa akan belajar bagaimana untuk mengolah data dalam berbagai bentuk struktural sesuai dengan fungsi dan tujuan data tersebut untuk digunakan.
 
