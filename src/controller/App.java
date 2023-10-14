@@ -3,7 +3,10 @@ package controller;
 import java.util.Scanner;
 
 public class App {
-    private final String[] menus = { "input", "view", "update", "delete", "re-order", "search" };
+    private final String[] menus = {
+            "input", "view", "update", "delete", "re-order", "search", "sort"
+    };
+
     private Scanner scanner = new Scanner(System.in);
 
     public int menus() {

@@ -37,13 +37,9 @@ public class Delete {
     if (index == 0) {
       temp = this.shift(store);
     } else {
-      for (int i = 0; i < store.length; i++) {
-        if (i < index) {
-          temp[i] = store[i];
-        } else if(i == index) {
-          continue;
-        } else {
-          temp[i] = store[i - 1];
+      for (int i = 0, j = 0; i < store.length; i++) {
+        if (i != index) {
+          temp[j++] = store[i];
         }
       }
     }

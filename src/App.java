@@ -13,6 +13,7 @@ public class App {
 		controller.View view = new controller.View();
 		controller.Update update = new controller.Update();
 		controller.Delete delete = new controller.Delete();
+		controller.Swap swap = new controller.Swap();
 		controller.Search search = new controller.Search();
 		controller.Sort sort = new controller.Sort();
 
@@ -69,9 +70,22 @@ public class App {
 							if (deleteOption > 0) {
 								System.out.print("continue?");
 								continued = main.scanner.next().toLowerCase().charAt(0) == 'y';
+							} else {
+									continued = false;
 							}
 						}
 					}
+				}
+				case 5 -> {
+					System.out.println("\nPindahkan data");
+					System.out.print("index dari data yang akan dipindahkan : ");
+					int from = main.scanner.nextInt();
+					System.out.print("lokasi index untuk data yang dipindahkan : ");
+					int to = main.scanner.nextInt();
+					mahasiswaStore.patch(swap.swap(mahasiswaStore.subscribe(), from, to));
+				}
+				case 6 -> {
+
 				}
 			}
 		}
