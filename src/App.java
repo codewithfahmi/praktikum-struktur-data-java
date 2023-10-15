@@ -1,10 +1,6 @@
-import java.util.Scanner;
-
 import model.Mahasiswa;
 
 public class App {
-	private final Scanner scanner = new Scanner(System.in);
-
 	public static void main(String[] args) throws Exception {
 		App main = new App();
 
@@ -18,14 +14,8 @@ public class App {
 		var sort = new controller.Sort();
 
 		var mahasiswaStore = new store.MahasiswaStore();
-
-		Mahasiswa[] mahasiswa = {
-				new Mahasiswa().set("John", "New Jersey", 22, 'l', new String[] { "makan", "ngoding", "tidur" }, 2.24f),
-				new Mahasiswa().set("Stefanie", "Colorado", 23, 'p', new String[] { "nyanyi", "masak", "makan" }, 3.4f),
-				new Mahasiswa().set("George", "Georgia", 28, 'l', new String[] { "hiking", "joging", "menari" }, 4f)
-		};
-
-		mahasiswaStore.patch(mahasiswa);
+		Mahasiswa mahasiswa = new Mahasiswa();
+		mahasiswaStore.patch(mahasiswa.initData());
 
 		while (true) {
 			int appOption = app.menus();
