@@ -2,8 +2,6 @@ import model.Mahasiswa;
 
 public class App {
 	public static void main(String[] args) throws Exception {
-		App main = new App();
-
 		var app = new controller.App();
 		var input = new controller.Input();
 		var view = new controller.View();

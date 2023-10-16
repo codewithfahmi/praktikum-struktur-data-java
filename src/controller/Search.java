@@ -44,8 +44,28 @@ public class Search {
   }
 
   public Mahasiswa[] binary(Mahasiswa[] mahasiswa, String keyword) {
-    Mahasiswa[] temp = new Mahasiswa[mahasiswa.length];
     Mahasiswa[] results = new Mahasiswa[0];
+    boolean founded = false;
+    int left = 0;
+    int right = mahasiswa.length;
+    int middle = (left + right) / 2;
+    Input input = new Input();
+
+    while (founded == false && (right - left) != 1) {
+      keyword = keyword.toLowerCase().trim();
+      String name = mahasiswa[middle].name.toLowerCase().trim();
+
+      if (keyword.compareTo(name) < 0) {
+        right = middle;
+        middle = (left + right) / 2;
+      } else if (keyword.compareTo(name) > 0) {
+        left = middle;
+        middle = (left + right / 2);
+      } else {
+        founded = true;
+        results = input.push(mahasiswa[middle], results);
+      }
+    }
 
     return results;
   }
@@ -57,15 +77,20 @@ public class Search {
 
   public void run(MahasiswaStore mahasiswaStore) {
     int searchOption = this.menus();
+    Mahasiswa[] results = null;
     switch (searchOption) {
       case 1 -> {
-        Mahasiswa[] results = this.linear(mahasiswaStore.subscribe(), this.prompt());
-        if (results.length == 0) {
-          System.out.println("Data tidak ditemukan");
-        } else {
-          new View().run(results);
-        }
+        results = this.linear(mahasiswaStore.subscribe(), this.prompt());
       }
+      case 2 -> {
+        results = this.binary(mahasiswaStore.subscribe(), this.prompt());
+      }
+    }
+
+    if (results.length == 0) {
+      System.out.println("Data tidak ditemukan");
+    } else {
+      new View().run(results);
     }
   }
 }
