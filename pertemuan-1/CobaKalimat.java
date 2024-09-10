@@ -3,13 +3,14 @@ class CobaKalimat {
         /**
          * * `char` hanya bisa menyimpan sebuah character atau ASCII
          * * ... dan hanya dapat digunakan dengan menggunakan simbol petik satu `'`
-         * * ... menjadikan kode di bawah ini merupakan kode yang akan mengakibatkan error
+         * * ... menjadikan kode di bawah ini merupakan kode yang akan mengakibatkan
+         * error
          * 
-        char __char = "HAI";
+         * char __char = "HAI";
          * 
          * * `String` dapat digunakan untuk menyimpan berbagai karakter
          */
         String __string = "HAI";
-        System.out.println(__char);
+        System.out.println(__string);
     }
 }
