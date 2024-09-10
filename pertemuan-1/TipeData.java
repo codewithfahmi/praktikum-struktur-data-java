@@ -12,10 +12,10 @@ class TipeData {
     }
 
     public void alphanumericType() {
-        byte    __byte  = 34;
-        short   __short = 714;
-        int     __int   = 2235641;
-        long    __long  = 546767226531L;
+        byte __byte = 34;
+        short __short = 714;
+        int __int = 2235641;
+        long __long = 546767226531L;
 
         System.out.println("Nilai Byte      : " + __byte);
         System.out.println("Nilai Short     : " + __short);
@@ -42,20 +42,21 @@ class TipeData {
         Scanner scanner = new Scanner(System.in);
         String[] hobbies = new String[3];
         System.out.println(String.format("Silahkan masukkan hobi (maks %d) : ", hobbies.length));
-        
-        for(int i = 0;i < hobbies.length;i++) {
+
+        for (int i = 0; i < hobbies.length; i++) {
             System.out.print(String.format("Hobi ke - %d : ", i + 1));
             hobbies[i] = scanner.nextLine();
         }
 
-        for(int i = 0;i < hobbies.length;i++) {
+        for (int i = 0; i < hobbies.length; i++) {
             System.out.println(String.format("Hobi ke - %d anda adalah %s", (i + 1), hobbies[i]));
         }
+        scanner.close();
     }
 
     public static void main(String[] args) {
         TipeData tipeData = new TipeData();
-        tipeData.charType();    
+        tipeData.charType();
         tipeData.stringType();
         tipeData.alphanumericType();
         tipeData.pecahanType();
