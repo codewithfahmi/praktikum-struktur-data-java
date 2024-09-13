@@ -17,7 +17,7 @@ class Mahasiswa {
 
 public class Tugas {
   public static void main(String[] args) throws InterruptedException, IOException {
-    Mahasiswa[] daftarMahasiswa = new Mahasiswa[2];
+    Mahasiswa[] daftarMahasiswa = new Mahasiswa[5];
     System.out.println("DAFTAR MAHASISWA\n");
 
     for (int i = 0; i < daftarMahasiswa.length; i++) {
