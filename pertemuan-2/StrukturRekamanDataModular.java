@@ -11,7 +11,7 @@ class FormatBiodata {
 }
 
 public class StrukturRekamanDataModular {
-  public int N = 10;
+  public int N = 1;
 
   public void entriData(FormatBiodata biodataMahasiswa[]) throws InterruptedException, IOException {
     String title = "Input Data Mahasiswa";
@@ -89,24 +89,38 @@ public class StrukturRekamanDataModular {
 
   public static void main(String[] args) throws InterruptedException, IOException {
     StrukturRekamanDataModular app = new StrukturRekamanDataModular();
-    FormatBiodata[] biodataMahasiswa = new FormatBiodata[app.N];
+    Scanner scanner = new Scanner(System.in);
 
-    /**
-     * Inisiasi rekaman data sejumlah nilai N
-     */
-    for (int i = 0; i < biodataMahasiswa.length; i++) {
-      biodataMahasiswa[i] = new FormatBiodata();
+    while (true) {
+      System.out.println("Masukkan jumlah data : ");
+      app.N = scanner.nextInt();
+      if (app.N > 15) {
+        System.out.println("[!] Maksimal jumlah data adalah 15");
+      } else if (app.N <= 0) {
+        System.out.println("[!] Jumlah data tidak boleh kurang dari atau sama dengan 0");
+      } else {
+        FormatBiodata[] biodataMahasiswa = new FormatBiodata[app.N];
+        /**
+         * Inisiasi rekaman data sejumlah nilai N
+         */
+        for (int i = 0; i < biodataMahasiswa.length; i++) {
+          biodataMahasiswa[i] = new FormatBiodata();
+        }
+
+        /**
+         * Mengisi data untuk setiap rekaman data `biodataMahasiswa`
+         */
+        app.entriData(biodataMahasiswa);
+
+        /**
+         * Menampilkan data
+         */
+        app.showData(biodataMahasiswa);
+        System.out.println("\n");
+
+        break;
+      }
     }
-
-    /**
-     * Mengisi data untuk setiap rekaman data `biodataMahasiswa`
-     */
-    app.entriData(biodataMahasiswa);
-
-    /**
-     * Menampilkan data
-     */
-    app.showData(biodataMahasiswa);
-    System.out.println("\n");
+    scanner.close();
   }
 }
