@@ -107,5 +107,6 @@ public class StrukturRekamanDataModular {
      * Menampilkan data
      */
     app.showData(biodataMahasiswa);
+    System.out.println("\n");
   }
 }
