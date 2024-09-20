@@ -11,7 +11,7 @@ class FormatBiodata {
 }
 
 public class StrukturRekamanDataModular {
-  public int N = 2;
+  public int N = 10;
 
   public void entriData(FormatBiodata biodataMahasiswa[]) throws InterruptedException, IOException {
     String title = "Input Data Mahasiswa";
