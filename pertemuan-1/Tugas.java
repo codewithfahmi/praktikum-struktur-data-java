@@ -30,7 +30,7 @@ public class Tugas {
       String judul = "Mahasiwa Ke - " + (i + 1);
       System.out.println(judul);
       System.out.println("-".repeat(judul.length()));
-      
+
       /**
        * Inisialisasi objek mahasiswa untuk menyimpan "mahasiswa" baru
        */
@@ -39,15 +39,21 @@ public class Tugas {
       /**
        * Form field untuk memasukkan data mahasiswa dari user input
        */
-      System.out.print(String.format("%-20s : ", "Nama")); mahasiswa.nama = scanner.nextLine();
-      System.out.print(String.format("%-20s : ", "Alamat")); mahasiswa.alamat = scanner.nextLine();
-      System.out.print(String.format("%-20s : ", "Umur")); mahasiswa.umur = scanner.nextInt();
-      System.out.print(String.format("%-20s : ", "Jenis Kelamin (L/P)")); mahasiswa.gender = scanner.next().charAt(0);
+      System.out.print(String.format("%-20s : ", "Nama"));
+      mahasiswa.nama = scanner.nextLine();
+      System.out.print(String.format("%-20s : ", "Alamat"));
+      mahasiswa.alamat = scanner.nextLine();
+      System.out.print(String.format("%-20s : ", "Umur"));
+      mahasiswa.umur = scanner.nextInt();
+      System.out.print(String.format("%-20s : ", "Jenis Kelamin (L/P)"));
+      mahasiswa.gender = scanner.next().charAt(0);
       scanner.nextLine();
       for (int j = 0; j < mahasiswa.hobi.length; j++) {
-        System.out.print(String.format("%-20s : ", "Hobi - " + (j + 1))); mahasiswa.hobi[j] = scanner.nextLine();
+        System.out.print(String.format("%-20s : ", "Hobi - " + (j + 1)));
+        mahasiswa.hobi[j] = scanner.nextLine();
       }
-      System.out.print(String.format("%-20s : ", "IPK")); mahasiswa.ipk = scanner.nextFloat();
+      System.out.print(String.format("%-20s : ", "IPK"));
+      mahasiswa.ipk = scanner.nextFloat();
       System.out.println();
 
       /**
@@ -59,11 +65,11 @@ public class Tugas {
        * Membersihkan layar ketika selesai memasukkan data
        */
 
-       if(System.getProperty("os.name").contains("Windows")) {
-          new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-       } else {
-          new ProcessBuilder("clear").inheritIO().start().waitFor();
-       }
+      if (System.getProperty("os.name").contains("Windows")) {
+        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+      } else {
+        new ProcessBuilder("clear").inheritIO().start().waitFor();
+      }
     }
 
     /**
@@ -96,7 +102,7 @@ public class Tugas {
      */
     String fString = "%-" + getMaxLength + "s";
 
-    /** 
+    /**
      * Header untuk tabel data
      */
 
@@ -116,14 +122,14 @@ public class Tugas {
      */
 
     for (int i = 0; i < daftarMahasiswa.length; i++) {
-      String nama     = String.format(fString, daftarMahasiswa[i].nama);
-      String alamat   = String.format(fString, daftarMahasiswa[i].alamat);
-      String umur     = String.format(fString, Integer.toString(daftarMahasiswa[i].umur));
-      String gender   = String.format(fString, (Character.toString(daftarMahasiswa[i].gender)
-                                                         .toUpperCase()
-                                                         .equals("L") ? "Laki - laki" : "Perempuan"));
-      String hobi     = String.format(fString, String.join(", ", daftarMahasiswa[i].hobi));
-      String ipk      = String.format(fString, Float.toString(daftarMahasiswa[i].ipk));
+      String nama = String.format(fString, daftarMahasiswa[i].nama);
+      String alamat = String.format(fString, daftarMahasiswa[i].alamat);
+      String umur = String.format(fString, Integer.toString(daftarMahasiswa[i].umur));
+      String gender = String.format(fString, (Character.toString(daftarMahasiswa[i].gender)
+          .toUpperCase()
+          .equals("L") ? "Laki - laki" : "Perempuan"));
+      String hobi = String.format(fString, String.join(", ", daftarMahasiswa[i].hobi));
+      String ipk = String.format(fString, Float.toString(daftarMahasiswa[i].ipk));
       System.out.println(nama + alamat + umur + gender + hobi + ipk);
     }
 
