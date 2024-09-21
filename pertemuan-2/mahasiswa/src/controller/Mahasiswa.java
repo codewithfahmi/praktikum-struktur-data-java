@@ -6,22 +6,20 @@ import util.Banner;
 import util.Constanta;
 
 public class Mahasiswa {
-  public FormatBiodata[] actionInsert(FormatBiodata[] biodataMahasiswa) {
+  public FormatBiodata actionInsert(FormatBiodata biodataMahasiswa, int counter) {
     Form form = new Form();
 
-    for (int i = 0; i < biodataMahasiswa.length; i++) {
-      Banner.create(String.format("mahasiswa [%d]", (i + 1)));
-      biodataMahasiswa[i].nama = form.inputOnlyString("nama");
-      biodataMahasiswa[i].alamat = form.inputString("alamat");
-      biodataMahasiswa[i].umur = form.inputInteger("umur");
-      biodataMahasiswa[i].gender = form.inputOnlyString("jenis kelamin").charAt(0);
-      for (int h = 0; h < biodataMahasiswa[i].hobi.length; h++) {
-        biodataMahasiswa[i].hobi[h] = form.inputOnlyString("hobi - " + (h + 1));
-      }
-      biodataMahasiswa[i].ipk = form.inputFloat("ipk");
-      System.out.print("\033[H\033[2J");
-      System.out.flush();
+    Banner.create(String.format("mahasiswa [%d]", (counter + 1)));
+    biodataMahasiswa.nama = form.inputOnlyString("nama");
+    biodataMahasiswa.alamat = form.inputString("alamat");
+    biodataMahasiswa.umur = form.inputInteger("umur");
+    biodataMahasiswa.gender = form.inputOnlyString("jenis kelamin").charAt(0);
+    for (int h = 0; h < biodataMahasiswa.hobi.length; h++) {
+      biodataMahasiswa.hobi[h] = form.inputOnlyString("hobi - " + (h + 1));
     }
+    biodataMahasiswa.ipk = form.inputFloat("ipk");
+    System.out.print("\033[H\033[2J");
+    System.out.flush();
 
     return biodataMahasiswa;
   }
