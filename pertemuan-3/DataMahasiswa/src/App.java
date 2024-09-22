@@ -5,6 +5,11 @@ import util.Menu;
 
 public class App {
     private static String APP_TITLE = "Data Mahasiswa";
+    private static String[] APP_INSERT_LABElS = {
+            "Tambahkan data di Depan",
+            "Tambahkan data di Tengah",
+            "Tambahkan data di Belakang"
+    };
 
     public static void main(String[] args) throws Exception {
         Biodata[] daftarMahasiswa = new Biodata[0];
@@ -29,41 +34,50 @@ public class App {
             /** Run feature */
             switch (menuOption) {
                 case 1:
-                    banner = "Tambahkan Data";
-                    System.out.println(String.format("\n%s\n%s", banner, "-".repeat(banner.length())));
+                    while (true) {
+                        banner = "Tambahkan Data";
+                        System.out.println(String.format("\n%s\n%s", banner,
+                                "-".repeat(banner.length())));
 
-                    /** Show application menu's subMenu */
-                    Menu.showSubMenu();
+                        if (positionOption == 0) {
+                            /** Show application menu's subMenu */
+                            Menu.showSubMenu();
 
-                    /** Set subMenu option */
-                    positionOption = Form.inputNumber("Pilih posisi");
+                            /** Set subMenu option */
+                            positionOption = Form.inputNumber("Pilih posisi");
+                        }
 
-                    if (positionOption == 1) {
-                        banner = "Tambahkan data di Depan";
-                        dataPosition = 0;
-                    } else if (positionOption == 2) {
-                        banner = "Tambahkan data di Tengah";
-                    } else {
-                        banner = "Tambahkan data di Belakang";
-                        dataPosition = -1;
+                        /** Set insert data position to 0 (front) or -1 (back) */
+                        dataPosition = positionOption == 1 ? 0 : -1;
+
+                        banner = APP_INSERT_LABElS[positionOption - 1];
+                        System.out.println(String.format("\n%s\n%s", banner,
+                                "-".repeat(banner.length())));
+
+                        /** Set insert data position to entered position */
+                        if (positionOption == 2) {
+                            dataPosition = Form.inputNumber(String.format("Pilih posisi data antara 0 - %s",
+                                    daftarMahasiswa.length));
+                        }
+
+                        /** Insert data */
+                        Mahasiswa.insert(daftarMahasiswa, dataPosition);
+                        isContinue = Form.inputOnlyString("Lanjut?").charAt(0);
+
+                        if (isContinue == 'n') {
+                            break;
+                        }
                     }
-
-                    System.out.println(String.format("\n%s\n%s", banner,
-                            "-".repeat(banner.length())));
-
-                    if (positionOption == 2) {
-                        dataPosition = Form.inputNumber(String.format("Pilih posisi data antara 0 - %s",
-                                daftarMahasiswa.length));
-                    }
-
-                    Mahasiswa.insert(daftarMahasiswa, dataPosition);
-
                     break;
                 case 2:
                     break;
                 case 3:
                     isBreak = true;
                     break;
+            }
+
+            if (isContinue == 'n') {
+                isContinue = 'y';
             }
 
             if (isBreak)
