@@ -72,6 +72,7 @@ public class App {
                 case 2:
                     break;
                 case 3:
+                    System.out.println("\n--- Anda telah meninggalkan aplikasi ---");
                     isBreak = true;
                     break;
             }
