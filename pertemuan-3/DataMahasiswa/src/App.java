@@ -61,8 +61,11 @@ public class App {
                         }
 
                         /** Insert data */
-                        Mahasiswa.insert(daftarMahasiswa, dataPosition);
-                        isContinue = Form.inputOnlyString("Lanjut?").charAt(0);
+                        daftarMahasiswa = Mahasiswa.insert(daftarMahasiswa, dataPosition);
+
+                        /** Confirmation dialog */
+                        isContinue = Form.inputOnlyString("Lanjut?")
+                                .charAt(0);
 
                         if (isContinue == 'n') {
                             break;
