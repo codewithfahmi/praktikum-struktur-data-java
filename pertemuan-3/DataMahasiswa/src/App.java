@@ -16,9 +16,9 @@ public class App {
         int menuOption = 0;
         int positionOption = 0;
         int dataPosition = 0;
-        String banner = null;
-        boolean isBreak = false;
         char isContinue = 'y';
+        boolean isBreak = false;
+        String banner = null;
 
         while (true) {
             /** Application's Banner */
