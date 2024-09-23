@@ -23,7 +23,7 @@ public class Mahasiswa {
       result[indexData] = new Biodata();
     }
 
-    result[indexData].namaMhs = Form.inputOnlyString("Nama");
+    result[indexData].namaMhs = Form.input("Nama").toAlphabet();
     result[indexData].alamatMhs = "";
 
     return result;

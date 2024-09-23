@@ -29,7 +29,7 @@ public class App {
             Menu.showMenu();
 
             /** Set menu option */
-            menuOption = Form.inputNumber("Pilih menu");
+            menuOption = Form.input("Pilih menu").toInt();
 
             /** Run feature */
             switch (menuOption) {
@@ -44,7 +44,7 @@ public class App {
                             Menu.showSubMenu();
 
                             /** Set subMenu option */
-                            positionOption = Form.inputNumber("Pilih posisi");
+                            positionOption = Form.input("Pilih posisi").toInt();
                         }
 
                         /** Set insert data position to 0 (front) or -1 (back) */
@@ -56,16 +56,15 @@ public class App {
 
                         /** Set insert data position to entered position */
                         if (positionOption == 2) {
-                            dataPosition = Form.inputNumber(String.format("Pilih posisi data antara 0 - %s",
-                                    daftarMahasiswa.length));
+                            dataPosition = Form.input(String.format("Pilih posisi data antara 0 - %s",
+                                    daftarMahasiswa.length)).toInt();
                         }
 
                         /** Insert data */
                         daftarMahasiswa = Mahasiswa.insert(daftarMahasiswa, dataPosition);
 
                         /** Confirmation dialog */
-                        isContinue = Form.inputOnlyString("Lanjut?")
-                                .charAt(0);
+                        isContinue = Form.input("Lanjut?").toSingleAlphabet();
 
                         if (isContinue == 'n') {
                             break;
