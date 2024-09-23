@@ -96,9 +96,9 @@ public class App {
 									while (true) {
 										dataPosition = Form
 												.input(String.format("Pilih index antara 0 - %s",
-														daftarMahasiswa.length))
+														daftarMahasiswa.length - 1))
 												.toInt();
-										if (dataPosition > daftarMahasiswa.length) {
+										if (dataPosition > daftarMahasiswa.length - 1) {
 											System.out.println("[!] index tidak boleh lebih dari "
 													+ (daftarMahasiswa.length == 0 ? 0
 															: daftarMahasiswa.length));

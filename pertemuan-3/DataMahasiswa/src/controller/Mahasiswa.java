@@ -47,9 +47,25 @@ public class Mahasiswa {
 
   public static Biodata[] delete(Biodata[] daftarMahasiswa, int position) {
     Biodata[] result = new Biodata[daftarMahasiswa.length - 1];
-    if (position == 0) {
-      for (int i = 0; i <= daftarMahasiswa.length; i++) {
-        result[i] = daftarMahasiswa[i + 1];
+    if (daftarMahasiswa.length == 0) {
+      result = new Biodata[0];
+    } else {
+      if (position == 0) {
+        for (int i = 1; i < daftarMahasiswa.length; i++) {
+          result[i - 1] = daftarMahasiswa[i];
+        }
+      } else if (position == -1) {
+        for (int i = 0; i < result.length; i++) {
+          result[i] = daftarMahasiswa[i];
+        }
+      } else {
+        for (int i = 0; i < daftarMahasiswa.length; i++) {
+          if (i == position) {
+            continue;
+          } else {
+            result[i] = daftarMahasiswa[i < position ? i : i + 1];
+          }
+        }
       }
     }
 
