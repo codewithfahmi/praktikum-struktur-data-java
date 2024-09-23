@@ -26,6 +26,11 @@ public class Form {
           typeName = "alphabet (not numbers or symbols)";
           rules = "[a-zA-Z]+";
           break;
+        case "float":
+        case "double":
+          typeName = "floating point number";
+          rules = "[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)";
+          break;
       }
     }
 
@@ -59,5 +64,9 @@ public class Form {
 
   public int toInt() {
     return Integer.parseInt(run("number").toString());
+  }
+
+  public float toFloat() {
+    return Float.parseFloat(run("float").toString());
   }
 }
