@@ -2,7 +2,7 @@ package util;
 
 public class Menu {
   private static String[] menus = {
-      "Insert", "Delete", "Exit"
+      "Insert", "Delete", "View", "Exit"
   };
 
   private static String[] subMenus = {
