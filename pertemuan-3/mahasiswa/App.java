@@ -7,697 +7,764 @@ class Mahasiswa {
 	public char gender;
 	public String[] hobi = new String[3];
 	public float ipk;
+
+	public Mahasiswa set(String nama, String alamat, int umur, char gender, String[] hobi, float ipk) {
+		Mahasiswa mahasiswa = new Mahasiswa();
+		mahasiswa.nama = nama;
+		mahasiswa.alamat = alamat;
+		mahasiswa.umur = umur;
+		mahasiswa.gender = gender;
+		mahasiswa.hobi = hobi;
+		mahasiswa.ipk = ipk;
+		return mahasiswa;
+	}
 }
 
-public class App {
+/**
+ * @class Form
+ */
+class Form {
+	private Scanner scanner = new Scanner(System.in);
+
+	// Warning format
+	private final String warning_format = "[!] \"%s\" %s";
+
+	// Warning messages
+	private final String warning_msg_required = "is required";
+	private final String warning_msg_integer = "must be only integer";
+	private final String warning_msg_string_only = "must no symbols or numbers";
+	private final String warning_msg_string = "must be only string";
+	private final String warning_msg_float = "must be decimal number";
+
+	// Validation rules
+	private final String integer_rule = "\\d+";
+	private final String string_only_rule = "[a-zA-Z]+";
+	private final String string_rule = "^[a-zA-Z0-9\\s.,@#$%^&*()_+]+$";
+	private final String float_rule = "^[+-]?([0-9]*[.])?[0-9]+$";
+
+	// Fields
+	private String warning_message;
+	private String input_result;
+	private String input_label;
+	private int input_label_length;
+	private String input_rule;
+
 	/**
-	 * Input untuk memasukkan data berjenis data String (hanya alfabet)
+	 * Membuat objek Form baru dengan label yang ditentukan
 	 * 
-	 * @param label
-	 * @return String result
+	 * @param label Teks yang muncul ketika input dimulai
+	 * @return Objek Form
 	 */
-	private String inputOnlyString(String label) {
-		@SuppressWarnings("resource")
-		Scanner scanner = new Scanner(System.in);
-		String result = null;
+	public static Form input(String label) {
+		Form form = new Form();
+		form.input_label = label;
+		return form;
+	}
+
+	/**
+	 * Membuat objek Form baru dengan label dan panjang label yang ditentukan
+	 * 
+	 * @param label  Teks yang muncul ketika input dimulai
+	 * @param length Panjang label yang akan dimunculkan
+	 * @return Objek Form
+	 */
+	public static Form input(String label, int length) {
+		Form form = new Form();
+		form.input_label = label;
+		form.input_label_length = length;
+		return form;
+	}
+
+	/**
+	 * Menjalankan proses input pengguna dalam loop hingga input yang valid
+	 * diberikan.
+	 * 
+	 * Metode ini akan terus meminta input dari pengguna sampai:
+	 * 1) Input tidak kosong atau hanya berisi spasi.
+	 * 2) Input memenuhi aturan yang telah ditentukan.
+	 * 
+	 * Jika input tidak valid, pesan peringatan akan ditampilkan kepada pengguna.
+	 */
+	private void run() {
 		while (true) {
-			System.out.print(String.format("%-10s : ", label));
-			result = scanner.nextLine();
-			if (!result.matches("[a-zA-Z]+")) {
-				System.out.println(String.format("[!] %s hanya boleh huruf alfabet", label));
-			} else if (result.isBlank() || result.isEmpty()) {
-				System.out.println(String.format("[!] %s tidak boleh kosong", label));
+			String format = this.input_label_length != 0 ? "%-" + this.input_label_length + "s : " : "%s : ";
+			System.out.print(String.format(format, this.input_label));
+			this.input_result = scanner.nextLine();
+			if (this.input_result.isBlank() || this.input_result.isEmpty()) {
+				System.out.println(String.format(
+						this.warning_format,
+						this.input_label,
+						this.warning_msg_required));
+			} else if (!this.input_result.matches(this.input_rule)) {
+				System.out.println(String.format(
+						this.warning_format,
+						this.input_label,
+						this.warning_message));
 			} else {
 				break;
 			}
 		}
-		return result;
 	}
 
 	/**
-	 * Input untuk memasukkan data berjenis data String
+	 * Merubah hasil masukan menjadi nilai integer
 	 * 
-	 * @param label
-	 * @return String result
+	 * @return int
 	 */
-	private String inputString(String label) {
-		@SuppressWarnings("resource")
-		Scanner scanner = new Scanner(System.in);
-		String result = null;
-		while (true) {
-			System.out.print(String.format("%-10s : ", label));
-			result = scanner.nextLine();
-			if (result.isBlank() || result.isEmpty()) {
-				System.out.println(String.format("[!] %s tidak boleh kosong", label));
-			} else {
-				break;
+	public int to_int() {
+		this.input_rule = this.integer_rule;
+		this.warning_message = this.warning_msg_integer;
+		this.run();
+		return Integer.parseInt(this.input_result);
+	}
+
+	/**
+	 * Merubah hasil masukan menjadi nilai String
+	 * 
+	 * @return String
+	 */
+	public String to_string() {
+		this.input_rule = this.string_rule;
+		this.warning_message = this.warning_msg_string;
+		this.run();
+		return this.input_result;
+	}
+
+	/**
+	 * Merubah hasil masukan menjadi nilai String hanya huruf
+	 * 
+	 * @return
+	 */
+	public String to_only_string() {
+		this.input_rule = this.string_only_rule;
+		this.warning_message = this.warning_msg_string_only;
+		this.run();
+		return this.input_result;
+	}
+
+	/**
+	 * Merubah hasil masukan menjadi nilai float
+	 * 
+	 * @return
+	 */
+	public float to_float() {
+		this.input_rule = this.float_rule;
+		this.warning_message = this.warning_msg_float;
+		this.run();
+		return Float.parseFloat(this.input_result);
+	}
+
+	public static void close() {
+		new Form().scanner.close();
+	}
+}
+
+class Record {
+	/**
+	 * Digunakan untuk menambahkan data ke rekaman data utama pada index ke 0
+	 * 
+	 * @param mahasiswa Rekaman data utama
+	 * @param data      Data yang akan dimasukkan ke rekaman data utama
+	 * @return Mahasiswa[] Rekaman data utama
+	 */
+	public static Mahasiswa[] prepend(Mahasiswa[] mahasiswa, Mahasiswa data) {
+		int record_length = mahasiswa.length;
+		Mahasiswa[] temporary = new Mahasiswa[record_length + 1];
+		if (record_length > 0)
+			for (int i = 0; i < record_length; i++)
+				temporary[i + 1] = mahasiswa[i];
+		temporary[0] = data;
+		return temporary;
+	}
+
+	/**
+	 * Digunakan untuk menambahkan data ke rekaman data utama pada index terakhir
+	 * 
+	 * @param mahasiswa Rekaman data utama
+	 * @param data      Data yang akan dimasukkan ke rekaman data utama
+	 * @return Mahasiswa[] Rekaman data utama
+	 */
+	public static Mahasiswa[] append(Mahasiswa[] mahasiswa, Mahasiswa data) {
+		int record_length = mahasiswa.length;
+		Mahasiswa[] temporary = new Mahasiswa[record_length + 1];
+		if (record_length > 0)
+			for (int i = 0; i < record_length; i++)
+				temporary[i] = mahasiswa[i];
+		temporary[record_length] = data;
+		return temporary;
+	}
+
+	/**
+	 * Digunakan untuk menambahkan data ke rekaman data utama pada index yang
+	 * ditentukan
+	 * 
+	 * @param mahasiswa Rekaman data utama
+	 * @param data      Data yang akan dimasukkan ke rekaman data utama
+	 * @param position  Posisi index untuk data yang akan dimasukkan
+	 * @return Mahasiswa[] Rekaman data utama
+	 */
+	public static Mahasiswa[] insert(Mahasiswa[] mahasiswa, Mahasiswa data, int position) {
+		int record_length = mahasiswa.length;
+		Mahasiswa[] temporary = new Mahasiswa[record_length + 1];
+		if (position == 0) {
+			temporary = prepend(mahasiswa, data);
+		} else if (position == (record_length - 1)) {
+			temporary = append(mahasiswa, data);
+		} else {
+			for (int i = 0; i < temporary.length; i++) {
+				temporary[i == position ? position : i] = i == position
+						? data
+						: mahasiswa[i < position ? i : i - 1];
 			}
 		}
-		return result;
+		return temporary;
 	}
 
 	/**
-	 * Input untuk memasukkan data berjenis data Integer
+	 * Digunakan untuk menghapus data pada index ke 0
 	 * 
-	 * @param label
-	 * @return Integer result
+	 * @param mahasiswa Rekaman data utama
+	 * @return Mahasiswa[] Rekaman data utama
 	 */
-	private int inputNumber(String label) {
-		@SuppressWarnings("resource")
-		Scanner scanner = new Scanner(System.in);
-		String result = null;
-		while (true) {
-			System.out.print(String.format("%-10s : ", label));
-			result = scanner.nextLine();
-			if (!result.matches("\\d+")) {
-				System.out.println(String.format("[!] %s hanya boleh angka", label));
-			} else if (result.isBlank() || result.isEmpty()) {
-				System.out.println(String.format("[!] %s tidak boleh kosong", label));
-			} else {
-				break;
+	public static Mahasiswa[] shift(Mahasiswa[] mahasiswa) {
+		int record_length = mahasiswa.length;
+		Mahasiswa[] temporary = new Mahasiswa[record_length - 1];
+		for (int i = 0; i < temporary.length; i++)
+			temporary[i] = mahasiswa[i + 1];
+		return temporary;
+	}
+
+	/**
+	 * Digunakan untuk menghapus data pada index terakhir
+	 * 
+	 * @param mahasiswa Rekaman data utama
+	 * @return Mahasiswa[] Rekaman data utama
+	 */
+	public static Mahasiswa[] pop(Mahasiswa[] mahasiswa) {
+		int record_length = mahasiswa.length;
+		Mahasiswa[] temporary = new Mahasiswa[record_length - 1];
+		for (int i = 0; i < temporary.length; i++)
+			temporary[i] = mahasiswa[i];
+		return temporary;
+	}
+
+	/**
+	 * Digunakan untuk menghapus data sesuai dengan index yang ditentukan
+	 * 
+	 * @param mahasiswa Rekaman data utama
+	 * @param position  Posisi data index yang akan dihapus
+	 * @return Mahasiswa[] Rekaman data
+	 */
+	public static Mahasiswa[] delete(Mahasiswa[] mahasiswa, int position) {
+		int record_length = mahasiswa.length;
+		Mahasiswa[] temporary = new Mahasiswa[record_length - 1];
+		if (position == 0) {
+			temporary = shift(mahasiswa);
+		} else if (position == record_length - 1) {
+			temporary = pop(mahasiswa);
+		} else {
+			for (int i = 0; i < temporary.length; i++) {
+				if (i == position) {
+					continue;
+				} else {
+					temporary[i < position ? i : i - 1] = mahasiswa[i];
+				}
 			}
 		}
-		return Integer.parseInt(result);
+
+		return temporary;
 	}
 
 	/**
-	 * Input untuk memasukkan data berjenis data Float
+	 * Digunakan untuk menukar data
 	 * 
-	 * @param label
-	 * @return Float result
+	 * @param mahasiswa Rekaman data utama
+	 * @param from      Index sumber
+	 * @param to        Index target
+	 * @return Mahasiswa[] Rekaman data utama
 	 */
-	private float inputFloat(String label) {
-		@SuppressWarnings("resource")
-		Scanner scanner = new Scanner(System.in);
-		String result = null;
-		while (true) {
-			System.out.print(String.format("%-10s : ", label));
-			result = scanner.nextLine();
-			if (!result.matches("^-?\\d+(\\.\\d+)?$")) {
-				System.out.println(String.format("[!] %s hanya boleh angka desimal", label));
-			} else if (result.isBlank() || result.isEmpty()) {
-				System.out.println(String.format("[!] %s tidak boleh kosong", label));
-			} else {
-				break;
-			}
-		}
-		return Float.parseFloat(result);
-	}
-
-	/**
-	 * Form untuk menambahkan data ke rekaman
-	 * 
-	 * @return Mahasiswa
-	 */
-	private Mahasiswa form() {
-		Mahasiswa mahasiswa = new Mahasiswa();
-		mahasiswa.nama = this.inputOnlyString("Nama");
-		mahasiswa.alamat = this.inputString("Alamat");
-		mahasiswa.umur = this.inputNumber("Umur");
-		mahasiswa.gender = this.inputOnlyString("Gender").charAt(0);
-		for (int i = 0; i < mahasiswa.hobi.length; i++)
-			mahasiswa.hobi[i] = this.inputOnlyString("hobi - " + (i + 1));
-		mahasiswa.ipk = this.inputFloat("IPK");
+	public static Mahasiswa[] swap(Mahasiswa[] mahasiswa, int from, int to) {
+		Mahasiswa temp = mahasiswa[from];
+		mahasiswa[from] = mahasiswa[to];
+		mahasiswa[to] = temp;
 		return mahasiswa;
 	}
 
 	/**
-	 * Fungsi untuk menambahkan data ke index pertama rekaman
+	 * Digunakan untuk mencari data pada rekaman data utama menggunakan algoritma
+	 * "linear search"
 	 * 
-	 * @param mahasiswa
-	 * @param data
-	 * @return Mahasiswa[] result
-	 * 
+	 * @param mahasiswa Rekaman data utama
+	 * @param keyword   Kata kunci yang dicari
+	 * @return Mahasiswa[]
 	 */
-	private Mahasiswa[] insertDepan(Mahasiswa[] mahasiswa, Mahasiswa data) {
-		int mahasiswaLength = mahasiswa.length;
-		Mahasiswa[] result = new Mahasiswa[mahasiswaLength + 1];
-		if (mahasiswa.length > 0)
-			for (int i = 0; i < mahasiswaLength; i++)
-				result[i + 1] = mahasiswa[i];
-		result[0] = data;
-		return result;
-	}
-
-	/**
-	 * Fungsi untuk menambahkan data ke index terakhir rekaman
-	 * 
-	 * @param mahasiswa
-	 * @param data
-	 * @return Mahasiswa[] result
-	 */
-	private Mahasiswa[] insertBelakang(Mahasiswa[] mahasiswa, Mahasiswa data) {
-		int mahasiswaLength = mahasiswa.length;
-		Mahasiswa[] result = new Mahasiswa[mahasiswaLength + 1];
-		if (mahasiswa.length > 0)
-			for (int i = 0; i < mahasiswaLength; i++)
-				result[i] = mahasiswa[i];
-		result[mahasiswaLength] = data;
-		return result;
-	}
-
-	/**
-	 * Fungsi untuk menambahkan data ke record dengan index yang disesuaikan
-	 * 
-	 * @param mahasiswa
-	 * @param data
-	 * @param position
-	 * @return Mahasiswa[] result
-	 */
-	private Mahasiswa[] insertTengah(Mahasiswa[] mahasiswa, Mahasiswa data, int position) {
-		int mahasiswaLength = mahasiswa.length;
-		Mahasiswa[] result = new Mahasiswa[mahasiswaLength + 1];
-		if (position == 0) {
-			result = insertDepan(mahasiswa, data);
-		} else if (position == mahasiswaLength) {
-			result = insertBelakang(mahasiswa, data);
-		} else {
-			for (int i = 0; i < result.length; i++)
-				result[i == position ? position : i] = i == position ? data : mahasiswa[i < position ? i : i - 1];
-		}
-
-		return result;
-	}
-
-	/**
-	 * Fungsi untuk menghapus item pada index ke 0 dari rekaman
-	 * 
-	 * @param mahasiswa
-	 * @return Mahasiswa[] result
-	 */
-	private Mahasiswa[] deleteDepan(Mahasiswa[] mahasiswa) {
-		Mahasiswa[] result = new Mahasiswa[mahasiswa.length - 1];
-		for (int i = 0; i < mahasiswa.length; i++)
-			if (i == 0) {
-				continue;
-			} else {
-				result[i - 1] = mahasiswa[i];
+	public static Mahasiswa[] linear_search(Mahasiswa[] mahasiswa, String keyword) {
+		Mahasiswa[] result = new Mahasiswa[0];
+		for (int i = 0; i < mahasiswa.length; i++) {
+			if (mahasiswa[i].nama.toLowerCase().contains(keyword.toLowerCase())) {
+				result = Record.append(result, mahasiswa[i]);
 			}
-
+		}
 		return result;
 	}
 
 	/**
-	 * Fungsi untuk menghapus item pada index terakhir (array length - 1) dari
-	 * rekaman
+	 * Digunakan untuk mencari data pada rekaman data utama menggunakan algoritma
+	 * "binary search"
 	 * 
-	 * @param mahasiswa
-	 * @return Mahasiswa[] result
+	 * @param mahasiswa Rekaman data utama
+	 * @param keyword   Kata kunci yang dicari
+	 * @return Mahasiswa[]
 	 */
-	private Mahasiswa[] deleteBelakang(Mahasiswa[] mahasiswa) {
-		Mahasiswa[] result = new Mahasiswa[mahasiswa.length - 1];
-		for (int i = 0; i < result.length; i++)
-			result[i] = mahasiswa[i];
-		return result;
-	}
+	public static Mahasiswa[] binary_search(Mahasiswa[] mahasiswa, String keyword) {
+		Mahasiswa[] result = new Mahasiswa[0];
+		int low = 0, high = mahasiswa.length - 1;
+		while (low <= high) {
+			int mid = (low + high) / 2;
 
-	/**
-	 * Fungsi untuk menghapus item dari rekaman dengan index yang ditentukan
-	 * 
-	 * @param mahasiswa
-	 * @param position
-	 * @return
-	 */
-	private Mahasiswa[] deleteTengah(Mahasiswa[] mahasiswa, int position) {
-		Mahasiswa[] result = new Mahasiswa[mahasiswa.length - 1];
-		if (position == 0) {
-			result = this.deleteDepan(mahasiswa);
-		} else if (position == mahasiswa.length - 1) {
-			result = this.deleteBelakang(mahasiswa);
-		} else {
-			for (int i = 0; i < mahasiswa.length; i++)
-				if (i == position) {
-					continue;
-				} else {
-					int index = i < position ? i : i - 1;
-					result[index] = mahasiswa[i];
+			if (mahasiswa[mid].nama.toLowerCase().contains(keyword.toLowerCase())) {
+				result = Record.append(result, mahasiswa[mid]);
+
+				int left = mid - 1;
+				while (left >= 0 && mahasiswa[left].nama.toLowerCase().contains(keyword.toLowerCase())) {
+					result = Record.append(result, mahasiswa[left]);
+					left--;
 				}
-		}
-		return result;
-	}
 
-	/**
-	 * Operasi untuk menampilkan seluruh data yang tersimpan
-	 * 
-	 * @param mahasiswa
-	 */
-	private void showData(Mahasiswa[] mahasiswa) {
-		String title = "Daftar Mahasiswa";
-		StringBuilder result = new StringBuilder();
-		StringBuilder header = new StringBuilder();
-		StringBuilder format = new StringBuilder();
-		StringBuilder borderSplit = new StringBuilder();
-		String[] columns = { "Nama", "Alamat", "Umur", "Gender", "Hobi", "IPK" };
-		int[] columnLength = { 20, 20, 8, 15, 25, 10 };
-		System.out.println(String.format("\n%s\n%s\n", title, "-".repeat(title.length())));
+				int right = mid + 1;
+				while (right < mahasiswa.length && mahasiswa[right].nama.toLowerCase().contains(keyword.toLowerCase())) {
+					result = Record.append(result, mahasiswa[right]);
+					right++;
+				}
 
-		/** generate border split */
-		for (int i = 0; i < columnLength.length; i++)
-			borderSplit.append((i == columnLength.length - 1)
-					? String.format("+%s+\n", "-".repeat(columnLength[i] - 2))
-					: String.format("+%s", "-".repeat(columnLength[i] - 1)));
+				break;
+			}
 
-		/** generate format for each row */
-		for (int j = 0; j < columnLength.length; j++)
-			format.append((j == columnLength.length - 1)
-					? "| %-" + (columnLength[j] - 4) + "s |\n" + borderSplit
-					: "| %-" + (columnLength[j] - 2) + "s");
-
-		header.append(borderSplit);
-
-		/** header columns name */
-		for (int i = 0; i < columns.length; i++)
-			header.append(String.format((i == (columns.length - 1))
-					? "| %-" + (columnLength[i] - 4) + "s |\n"
-					: "| %-" + (columnLength[i] - 2) + "s", columns[i]));
-
-		header.append(borderSplit);
-		result.append(header);
-
-		/** table content */
-		if (mahasiswa.length > 0) {
-			for (int i = 0; i < mahasiswa.length; i++)
-				result.append(String.format(format.toString(),
-						mahasiswa[i].nama,
-						mahasiswa[i].alamat,
-						Integer.toString(mahasiswa[i].umur),
-						mahasiswa[i].gender,
-						String.join(", ", mahasiswa[i].hobi),
-						Float.toString(mahasiswa[i].ipk)));
-		} else {
-			int totalLength = 0;
-			for (int i = 0; i < columnLength.length; i++)
-				totalLength += columnLength[i];
-			result.append(String.format("| %-" + (totalLength - 4) + "s |\n" + borderSplit, "Belum ada data"));
-		}
-
-		System.out.println(result);
-	}
-
-	/**
-	 * Linear Search Operation
-	 * 
-	 * @param mahasiswa
-	 * @param keyword
-	 * @return Mahasiswa[] resylt
-	 */
-	private Mahasiswa[] linearSearch(Mahasiswa[] mahasiswa, String keyword) {
-		Mahasiswa[] result = new Mahasiswa[0];
-		for (int i = 0; i < mahasiswa.length; i++)
-			if (mahasiswa[i].nama.contains(keyword))
-				result = this.insertBelakang(result, mahasiswa[i]);
-		return result;
-	}
-
-	/**
-	 * Binary Search Operation
-	 * 
-	 * @param mahasiswa
-	 * @param keyword
-	 * @return Mahasiswa[] result
-	 */
-
-	private Mahasiswa[] binarySearch(Mahasiswa[] mahasiswa, String keyword) {
-		Mahasiswa[] result = new Mahasiswa[0];
-		int i = 0;
-		int n = mahasiswa.length - 1;
-		int mid = (i + n) / 2;
-		boolean isLocated = false;
-		int position = 0;
-		while (isLocated == false) {
-			if (mahasiswa[mid].nama.compareTo(keyword) < 0) {
-				n = mid;
-				mid = (i + n) / 2;
-			} else if (mahasiswa[mid].nama.compareTo(keyword) > 0) {
-				i = mid;
-				mid = (i + n) / 2;
+			if (mahasiswa[mid].nama.compareToIgnoreCase(keyword) < 0) {
+				low = mid + 1;
 			} else {
-				position = mid;
-				isLocated = true;
+				high = mid - 1;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Digunakan untuk menampilkan data pada rekaman data utama
+	 * 
+	 * @param mahasiswa Rekaman data utama
+	 */
+	public static void show(Mahasiswa[] mahasiswa) {
+		int name_format_length = 20;
+		int alamat_format_length = 25;
+		int umur_format_length = 8;
+		int gender_format_length = 10;
+		int hobi_format_length = 25;
+		int ipk_format_length = 8;
+		int[] format_lengths = { name_format_length, alamat_format_length, umur_format_length, gender_format_length,
+				hobi_format_length, ipk_format_length };
+		int total_format_lengths = 0;
+		String[] headers = { "Nama", "Alamat", "Umur", "Gender", "Hobi", "Ipk" };
+		String strip_line = "";
+		String table = "\n";
+		String header = "";
+		String body = "";
+
+		// Sum of format lengths
+		for (int i = 0; i < format_lengths.length; i++)
+			total_format_lengths += format_lengths[i];
+
+		// Create strip line
+		for (int i = 0; i < format_lengths.length; i++)
+			strip_line += (i == format_lengths.length - 1)
+					? String.format("+%s+\n", "-".repeat(format_lengths[i] - 2))
+					: String.format("+%s", "-".repeat(format_lengths[i] - 1));
+
+		// Create table header
+		for (int i = 0; i < headers.length; i++)
+			header += String.format(i == (headers.length - 1)
+					? "| %-" + (format_lengths[i] - 4) + "s |\n"
+					: "| %-" + (format_lengths[i] - 2) + "s",
+					headers[i]);
+
+		// Create table body
+		if (mahasiswa.length == 0) {
+			body += String.format("| %-" + (total_format_lengths - 4) + "s |\n" + strip_line, "Tidak ada data");
+		} else {
+			for (int i = 0; i < mahasiswa.length; i++) {
+				body += String.format("| %-" + (name_format_length - 2) + "s",
+						mahasiswa[i].nama.length() >= (name_format_length - 2)
+								? mahasiswa[i].nama.substring(0, name_format_length - 6) + "..."
+								: mahasiswa[i].nama);
+				body += String.format("| %-" + (alamat_format_length - 2) + "s",
+						mahasiswa[i].alamat.length() >= (alamat_format_length - 2)
+								? mahasiswa[i].alamat.substring(0, alamat_format_length - 6) + "..."
+								: mahasiswa[i].alamat);
+				body += String.format("| %-" + (umur_format_length - 2) + "d", mahasiswa[i].umur);
+				body += String.format("| %-" + (gender_format_length - 2) + "s", mahasiswa[i].gender);
+				body += String.format("| %-" + (hobi_format_length - 2) + "s",
+						String.join(", ", mahasiswa[i].hobi).length() >= (hobi_format_length - 2)
+								? String.join(", ", mahasiswa[i].hobi).substring(0, hobi_format_length - 6) + "..."
+								: String.join(", ", mahasiswa[i].hobi));
+				body += String.format("| %-" + (ipk_format_length - 4) + ".2f |\n", mahasiswa[i].ipk);
+				body += strip_line;
 			}
 		}
 
-		result = this.insertBelakang(result, mahasiswa[position]);
+		// Build table
+		table += strip_line;
+		table += header;
+		table += strip_line;
+		table += body;
+
+		System.out.println(table);
+	}
+
+	/**
+	 * Pencarian data menggunakan algoritma Bubble Sort
+	 * 
+	 * @param mahasiswa Rekaman data utama
+	 * @return Mahasiswa[]
+	 */
+	public static Mahasiswa[] bubble_sort(Mahasiswa[] mahasiswa) {
+		Util.__("Starting \"Bubble Sort\"");
+		long start_time = System.nanoTime();
+		Mahasiswa[] result = mahasiswa;
+		for (int i = 0; i < result.length - 1; i++) {
+			for (int j = i + 1; j < result.length; j++) {
+				if (result[i].nama.compareTo(result[j].nama) > 0) {
+					System.out.println("[*] index " + i + " swapped with index " + j);
+					Record.swap(result, i, j);
+				}
+			}
+		}
+		long end_time = System.nanoTime();
+		float span_time = (end_time - start_time) / 1_000_000_000;
+		System.out.println("[*] The records has been sorted using \"Bubble Sort\" algorithm in " + span_time + " seconds");
 		return result;
 	}
+}
+
+class Controller {
+	private Mahasiswa __form() {
+		Mahasiswa mahasiswa = new Mahasiswa();
+		int format_length = 10;
+		mahasiswa.nama = Form.input("nama", format_length).to_only_string();
+		mahasiswa.alamat = Form.input("alamat", format_length).to_string();
+		mahasiswa.umur = Form.input("umur", format_length).to_int();
+		mahasiswa.gender = Form.input("gender", format_length).to_only_string().charAt(0);
+		for (int i = 0; i < mahasiswa.hobi.length; i++)
+			mahasiswa.hobi[i] = Form.input("hobi - " + (i + 1), format_length).to_only_string();
+		mahasiswa.ipk = Form.input("ipk", format_length).to_float();
+		return mahasiswa;
+	}
+
+	/**
+	 * Method untuk menampilkan fitur "insert" atau menambahkan data ke rekaman data
+	 * utama
+	 */
+	public static void action_insert() {
+		Controller controller = new Controller();
+		int menu_option = 0;
+
+		while (true) {
+			Util.__("Tambah Data");
+			Util.__e(Env.insert_delete_menu);
+
+			menu_option = Form.input("pilih").to_int();
+			Util.__("mahasiswa [" + App.mahasiswa.length + "]");
+			switch (menu_option) {
+				// Prepend operation
+				case 1:
+					App.mahasiswa = Record.prepend(App.mahasiswa, controller.__form());
+					break;
+
+				// Insert by index operation
+				case 2:
+					if (App.mahasiswa.length == 0) {
+						Record.append(App.mahasiswa, controller.__form());
+					} else {
+						int position = 0;
+
+						while (true) {
+							position = Form.input("index").to_int();
+							int record_length = App.mahasiswa.length;
+							if (position > record_length - 1) {
+								System.out.println("[!] index must be between 0 - " + record_length);
+							} else {
+								break;
+							}
+						}
+
+						App.mahasiswa = Record.insert(App.mahasiswa, controller.__form(), position);
+					}
+					break;
+
+				// Append operation
+				case 3:
+					App.mahasiswa = Record.append(App.mahasiswa, controller.__form());
+					break;
+			}
+
+			if (Util.continue_prompt() == 'n') {
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Method untuk menampilkan fitur "delete" atau menghapus data dari rekaman data
+	 * utama
+	 */
+	public static void action_delete() {
+		int menu_option = 0;
+		while (true) {
+			Util.__("Hapus Data");
+			Util.__e(Env.insert_delete_menu);
+
+			menu_option = Form.input("pilih").to_int();
+
+			switch (menu_option) {
+				// Shift operation
+				case 1:
+					App.mahasiswa = Record.shift(App.mahasiswa);
+					break;
+
+				// Delete by index operation
+				case 2:
+					int position = 0;
+
+					while (true) {
+						position = Form.input("index").to_int();
+						int record_length = App.mahasiswa.length;
+						if (position > record_length - 1) {
+							System.out.println("[!] index must be between 0 - " + record_length);
+						} else {
+							break;
+						}
+					}
+
+					App.mahasiswa = Record.delete(App.mahasiswa, position);
+					break;
+
+				// Pop operation
+				case 3:
+					App.mahasiswa = Record.pop(App.mahasiswa);
+					break;
+			}
+
+			if (Util.continue_prompt() == 'n') {
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Method untuk menampilkan data yang tersimpan pada rekaman data utama
+	 */
+	public static void action_view() {
+		Record.show(App.mahasiswa);
+	}
+
+	/**
+	 * Method untuk menampilkan fitur "edit" atau merubah data yang sudah tersimpan
+	 * pada rekaman data utama
+	 */
+	public static void action_edit() {
+		if (App.mahasiswa.length == 0) {
+			System.out.println("\n[!] There is no data to edit");
+		} else {
+			while (true) {
+				Util.__("Edit Data");
+				int index = 0;
+				while (true) {
+					index = Form.input("index").to_int();
+					if (index > (App.mahasiswa.length - 1) || index < 0) {
+						System.out.println("[!] index must be between 0 - " + (App.mahasiswa.length - 1));
+					} else {
+						break;
+					}
+				}
+				Mahasiswa mahasiswa = App.mahasiswa[index];
+				Util.__("Data Sekarang");
+				System.out.println(String.format("%-10s : %s", "nama", mahasiswa.nama));
+				System.out.println(String.format("%-10s : %s", "alamat", mahasiswa.alamat));
+				System.out.println(String.format("%-10s : %d", "umur", mahasiswa.umur));
+				System.out.println(String.format("%-10s : %s", "gender", mahasiswa.gender));
+				System.out.println(String.format("%-10s : %s", "hobi", String.join(", ", mahasiswa.hobi)));
+				System.out.println(String.format("%-10s : %s", "ipk", mahasiswa.ipk));
+
+				Util.__("Ubah data sekarang");
+				App.mahasiswa[index] = new Controller().__form();
+
+				if (Util.continue_prompt() == 'n') {
+					break;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Method untuk menampilkan fitur "sort" atau pengurutan data sesuai dengan
+	 * algoritma yang dipilih
+	 */
+	public static void action_sort() {
+		if (App.mahasiswa.length == 0) {
+			System.out.println("\n[!] There is no data to sort");
+		} else {
+			Util.__("Urutkan Data");
+			Util.__e(Env.sort_menu);
+			int menu_option = Form.input("pilih").to_int();
+			switch (menu_option) {
+				case 1:
+					App.mahasiswa = Record.bubble_sort(App.mahasiswa);
+					break;
+				case 2:
+					break;
+			}
+		}
+	}
+
+	/**
+	 * Method untuk menampilkan fitur "search" atau mencari data berdasarkan keyword
+	 */
+	public static void action_search() {
+		int menu_option = 0;
+		Mahasiswa[] result = null;
+		String keyword = null;
+
+		while (true) {
+			Util.__("Cari Data");
+			Util.__e(Env.search_menu);
+			menu_option = Form.input("pilih").to_int();
+			switch (menu_option) {
+				case 1:
+					keyword = Form.input("keyword").to_string();
+					result = Record.linear_search(App.mahasiswa, keyword);
+					break;
+				case 2:
+					keyword = Form.input("keyword").to_string();
+					result = Record.binary_search(Record.bubble_sort(App.mahasiswa), keyword);
+					break;
+			}
+
+			if (result != null) {
+				Util.__(String.format("\n[*] Search completed (%d records found)", result.length));
+				Record.show(result);
+			} else {
+				System.out.println("[!] There is no data to display");
+			}
+
+			if (Util.continue_prompt() == 'n') {
+				break;
+			}
+		}
+	}
+
+	public static void action_swap() {
+		int from_index = 0;
+		int to_index = 0;
+		while (true) {
+			Util.__("Tukar Data");
+
+			// Get "source index"
+			while (true) {
+				from_index = Form.input("index source").to_int();
+				if (from_index > App.mahasiswa.length - 1 || from_index < 0) {
+					System.out.println("[!] \"index source\" must be between 0 - " + (App.mahasiswa.length - 1));
+				} else {
+					break;
+				}
+			}
+
+			// Get "target index"
+			while (true) {
+				to_index = Form.input("index target").to_int();
+				if (to_index > App.mahasiswa.length - 1 || to_index < 0) {
+					System.out.println("[!] \"index target\" must be between 0 - " + (App.mahasiswa.length - 1));
+				} else if (to_index == from_index) {
+					System.out.println("[!] source and target index cannot be the same");
+				} else {
+					break;
+				}
+			}
+
+			App.mahasiswa = Record.swap(App.mahasiswa, from_index, to_index);
+
+			if (Util.continue_prompt() == 'n') {
+				break;
+			}
+		}
+	}
+}
+
+class Util {
+	public static void __(String text) {
+		System.out.println(String.format("\n%s\n%s", text, "-".repeat(text.length())));
+	}
+
+	public static void __e(String[] list) {
+		for (int i = 0; i < list.length; i++)
+			System.out.println(String.format("[%d]  %s", (i + 1), list[i]));
+	}
+
+	public static char continue_prompt() {
+		char p = Form.input("lagi?").to_only_string().charAt(0);
+		return p;
+	}
+}
+
+class Env {
+	public static String[] menu = { "Insert", "View", "Edit", "Delete", "Sort", "Swap", "Search", "Exit" };
+	public static String[] insert_delete_menu = { "Depan", "Tengah", "Belakang" };
+	public static String[] search_menu = { "Linear Search", "Binary Search" };
+	public static String[] sort_menu = { "Bubble Sort", "Selection Sort" };
+}
+
+public class App {
+	public static Mahasiswa[] mahasiswa = {
+			new Mahasiswa().set("Fahmi Syahrul Yahya", "Jepara", 23, 'l', new String[] { "Makan", "Tidur", "Ngoding" },
+					2.32F),
+			new Mahasiswa().set("Fahmi Himawan", "Jepara", 23, 'l', new String[] { "Makan", "Tidur", "Ngoding" },
+					2.32F),
+			new Mahasiswa().set("Siska", "Jakarta", 25, 'p', new String[] { "Makan", "Tidur", "Ngoding" }, 3.4F),
+			new Mahasiswa().set("Rudi", "Semarang", 20, 'l', new String[] { "Makan", "Tidur", "Ngoding" }, 4.00F)
+	};
+	public static int menu_option = 0;
+	public static char is_continue = 'y';
 
 	public static void main(String[] args) {
-		try (Scanner scanner = new Scanner(System.in)) {
-			String menu[] = { "Input", "View", "Edit", "Delete", "Reorder", "Search", "Exit" };
-			String subMenu[] = { "Depan", "Tengah", "Belakang" };
-			int option = 0;
-			int subOption = 0;
-			char isContinue = 'y';
-			Mahasiswa[] mahasiswa = new Mahasiswa[0];
-			App app = new App();
-			while (true) {
-				String appTitle = "Data Mahasiswa";
-				System.out.println(String.format("\n%s\n%s",
-						appTitle,
-						"-".repeat(appTitle.length())));
-				for (int i = 0; i < menu.length; i++)
-					System.out.println(String.format("%d. %s", (i + 1), menu[i]));
-				option = app.inputNumber("pilih");
-				switch (option) {
-					/**
-					 * * Insert Operation
-					 * ---------------------------------------------------------------------------------------
-					 */
-					case 1:
-						String inserTitle = "Tambah Data Mahasiswa";
-						System.out.println(String.format("\n%s\n%s",
-								inserTitle,
-								"-".repeat(inserTitle.length())));
-						for (int i = 0; i < subMenu.length; i++)
-							System.out.println(String.format("%d. %s", (i + 1), subMenu[i]));
-						subOption = app.inputNumber("pilih");
+		while (true) {
+			Util.__("Database Mahasiswa");
+			Util.__e(Env.menu);
+			menu_option = Form.input("pilih").to_int();
 
-						while (isContinue == 'y') {
-							switch (subOption) {
-								/**
-								 * * Operasi penambahan data pada index ke 0
-								 * ---------------------------------------------------------------------------------
-								 */
-								case 1:
-									inserTitle = "Tambah Depan";
-									System.out.println(String.format("\n%s\n%s",
-											inserTitle,
-											"-".repeat(inserTitle.length())));
-									mahasiswa = app.insertDepan(mahasiswa, app.form());
-									break;
-
-								/**
-								 * * Operasi penambahan data pada index yang ditentukan
-								 * ---------------------------------------------------------------------------------
-								 */
-								case 2:
-									inserTitle = "Tambah Tengah";
-									System.out.println(String.format("\n%s\n%s",
-											inserTitle,
-											"-".repeat(inserTitle.length())));
-									String limitWarning = String.format("index hanya boleh 0 - %d",
-											(mahasiswa.length == 0 ? 0 : (mahasiswa.length - 1)));
-									System.out.println(limitWarning);
-									int index = 0;
-									while (true) {
-										index = app.inputNumber("index");
-										if (index > mahasiswa.length) {
-											System.out.println(limitWarning);
-										} else {
-											break;
-										}
-									}
-									mahasiswa = app.insertTengah(mahasiswa, app.form(), index);
-									break;
-
-								/**
-								 * * Operasi penambahan data pada index terakhir
-								 * ---------------------------------------------------------------------------------
-								 */
-								case 3:
-									inserTitle = "Tambah Belakang";
-									System.out.println(String.format("\n%s\n%s",
-											inserTitle,
-											"-".repeat(inserTitle.length())));
-									mahasiswa = app.insertBelakang(mahasiswa, app.form());
-									break;
-							}
-
-							isContinue = Character.toLowerCase(app.inputOnlyString("Lagi")
-									.charAt(0));
-						}
-						break;
-					/** End of Insert Operation */
-
-					/**
-					 * * Show Data Operation
-					 * ---------------------------------------------------------------------------------------
-					 */
-					case 2:
-						app.showData(mahasiswa);
-						break;
-					/** End of Show Data Operation */
-
-					/**
-					 * * Edit Operation
-					 * ---------------------------------------------------------------------------------------
-					 */
-					case 3:
-						String editTitle = "Edit Data Mahasiswa";
-						System.out.println(String.format("\n%s\n%s",
-								editTitle,
-								"-".repeat(editTitle.length())));
-						if (mahasiswa.length == 0) {
-							System.out.println("[!] Tidak ada data yang bisa diubah");
-						} else {
-							while (isContinue != 'n') {
-								/**
-								 * * Proses pencarian data
-								 * ---------------------------------------------------------------------------------
-								 */
-								int index = 0;
-								while (true) {
-									index = app.inputNumber("index");
-									if (index > mahasiswa.length - 1 || index < 0) {
-										System.out.println("[!] index hanya boleh 0 - " + (mahasiswa.length - 1));
-									} else {
-										break;
-									}
-								}
-
-								Mahasiswa current = mahasiswa[index];
-
-								String editCurrentTitle = "Data Sekarang";
-								System.out.println(String.format("\n%s\n%s",
-										editCurrentTitle,
-										"-".repeat(editCurrentTitle.length())));
-								System.out.println(String.format("%-7s : %s",
-										"Nama",
-										current.nama));
-								System.out.println(String.format("%-7s : %s",
-										"Alamat",
-										current.alamat));
-								System.out.println(String.format("%-7s : %s",
-										"Umur",
-										Integer.toString(current.umur)));
-								System.out.println(String.format("%-7s : %s",
-										"Gender",
-										current.gender));
-								System.out.println(String.format("%-7s : %s",
-										"Hobi",
-										String.join(", ", current.hobi)));
-								System.out.println(String.format("%-7s : %s",
-										"IPK",
-										Float.toString(current.ipk)));
-
-								editCurrentTitle = "Ubah Data Sekarang";
-								System.out.println(String.format("\n%s\n%s",
-										editCurrentTitle,
-										"-".repeat(editCurrentTitle.length())));
-								Mahasiswa newData = app.form();
-								mahasiswa[index] = newData;
-								isContinue = Character.toLowerCase(app.inputOnlyString("Lagi")
-										.charAt(0));
-							}
-						}
-						break;
-
-					/**
-					 * * Delete Operation
-					 * ---------------------------------------------------------------------------------------
-					 */
-					case 4:
-						String deleteTitle = "Hapus Data Mahasiswa";
-						System.out.println(String.format("\n%s\n%s",
-								deleteTitle,
-								"-".repeat(deleteTitle.length())));
-						if (mahasiswa.length == 0) {
-							System.out.println("[!] Tidak ada data yang bisa dihapus");
-						} else {
-							for (int i = 0; i < subMenu.length; i++)
-								System.out.println(String.format("%d. %s", (i + 1), subMenu[i]));
-							System.out.print(">>> ");
-							subOption = scanner.nextInt();
-
-							while (isContinue != 'n') {
-								switch (subOption) {
-									/**
-									 * * Operasi penghapusan data pada index 0
-									 * -------------------------------------------------------------------------------
-									 */
-									case 1:
-										deleteTitle = "Hapus Depan";
-										System.out.println(String.format("\n%s\n%s",
-												deleteTitle,
-												"-".repeat(deleteTitle.length())));
-										mahasiswa = app.deleteDepan(mahasiswa);
-										break;
-
-									/**
-									 * * Operasi penghapusan data pada index yang ditentukan
-									 * -------------------------------------------------------------------------------
-									 */
-									case 2:
-										// Menampilkan judul
-										deleteTitle = "Hapus Tengah";
-										System.out.println(String.format("\n%s\n%s",
-												deleteTitle,
-												"-".repeat(deleteTitle.length())));
-
-										/**
-										 * * Warning Message
-										 * 
-										 * Pesan ini digunakan apabila user memasukkan index melebihi atau bahkan kurang
-										 * dari panjang rekaman
-										 */
-										String limitWarning = String.format("index hanya boleh 0 - %d",
-												(mahasiswa.length == 0 ? 0 : (mahasiswa.length - 1)));
-										System.out.println(limitWarning);
-										int position = 0;
-										while (true) {
-											position = app.inputNumber("index");
-											if (position > mahasiswa.length) {
-												System.out.println(limitWarning);
-											} else {
-												break;
-											}
-										}
-										mahasiswa = app.deleteTengah(mahasiswa, position);
-										break;
-
-									/**
-									 * * Operasi penghapusan data pada index terakhir
-									 * -------------------------------------------------------------------------------
-									 */
-									case 3:
-										deleteTitle = "Hapus Belakang";
-										System.out.println(String.format("\n%s\n%s",
-												deleteTitle,
-												"-".repeat(deleteTitle.length())));
-										mahasiswa = app.deleteBelakang(mahasiswa);
-										break;
-								}
-								isContinue = Character.toLowerCase(app.inputOnlyString("Lagi")
-										.charAt(0));
-							}
-						}
-						break;
-					/** End of Delete Operation */
-
-					/**
-					 * * Reorder Operation
-					 * ---------------------------------------------------------------------------------------
-					 */
-					case 5:
-						String reorderTitle = "Tukar Posisi Data";
-						System.out.println(String.format("\n%s\n%s",
-								reorderTitle,
-								"-".repeat(reorderTitle.length())));
-
-						while (isContinue != 'n') {
-							int indexSource = 0; // Posisi index data yang akan dipindah
-							int indexTarget = 0; // Posisi baru untuk data yang akan ditukar
-
-							while (true) {
-								indexSource = app.inputNumber("index source");
-								if (indexSource > mahasiswa.length - 1 || indexSource < 0) {
-									System.out.println("[!] Index hanya boleh 0 - " + (mahasiswa.length - 1));
-								} else {
-									break;
-								}
-							}
-
-							while (true) {
-								indexTarget = app.inputNumber("target index");
-								if (indexTarget > mahasiswa.length - 1 || indexTarget < 0) {
-									System.out.println("[!] Index hanya boleh 0 - " + (mahasiswa.length - 1));
-								} else if (indexSource == indexTarget) {
-									System.out.println("[!] \"Index target\" tidak boleh sama dengan \"Index source\"");
-								} else {
-									break;
-								}
-							}
-
-							Mahasiswa temp = mahasiswa[indexTarget];
-							mahasiswa[indexTarget] = mahasiswa[indexSource];
-							mahasiswa[indexSource] = temp;
-
-							isContinue = Character.toLowerCase(app.inputOnlyString("Lagi")
-									.charAt(0));
-						}
-
-						break;
-					/** End of Reorder Operation */
-
-					/**
-					 * * Search Operation
-					 * ---------------------------------------------------------------------------------------
-					 */
-					case 6:
-						String[] searchMenu = { "Linear", "Binary" };
-						String searchTitle = "Pencarian Data";
-						System.out.println(String.format("\n%s\n%s",
-								searchTitle,
-								"-".repeat(searchTitle.length())));
-						while (isContinue != 'n') {
-							for (int i = 0; i < searchMenu.length; i++)
-								System.out.println(String.format("%d. %s", (i + 1), searchMenu[i]));
-							option = app.inputNumber("pilih");
-							String keyword = null;
-							Mahasiswa[] result = null;
-							switch (option) {
-								/**
-								 * * Linear Search Operation
-								 * ---------------------------------------------------------------------------------
-								 */
-								case 1:
-									searchTitle = "Linear Search";
-									System.out.println(String.format("\n%s\n%s",
-											searchTitle,
-											"-".repeat(searchTitle.length())));
-									keyword = app.inputOnlyString("keyword");
-									result = app.linearSearch(mahasiswa, keyword);
-									if (result != null) {
-										app.showData(result);
-									} else {
-										System.out.println("[!] Tidak ada data yang ditemukan");
-									}
-									break;
-								/**
-								 * * Binary Search Operation
-								 * ---------------------------------------------------------------------------------
-								 */
-								case 2:
-									searchTitle = "Binary Search";
-									System.out.println(String.format("\n%s\n%s",
-											searchTitle,
-											"-".repeat(searchTitle.length())));
-									keyword = app.inputOnlyString("keyword");
-									result = app.binarySearch(mahasiswa, keyword);
-									if (result != null) {
-										app.showData(result);
-									} else {
-										System.out.println("[!] Tidak ada data yang ditemukan");
-									}
-									break;
-								default:
-									System.out.println("[!] Pilihan hanya 1 dan 2");
-									break;
-							}
-
-							isContinue = Character.toLowerCase(app.inputOnlyString("Lagi").charAt(0));
-						}
-						break;
-					/** End of Search Operation */
-
-					case 7:
-						System.exit(0);
-						break;
-				}
-
-				if (isContinue == 'n') {
-					isContinue = 'y';
-				}
+			switch (menu_option) {
+				case 1:
+					Controller.action_insert();
+					break;
+				case 2:
+					Controller.action_view();
+					break;
+				case 3:
+					Controller.action_edit();
+					break;
+				case 4:
+					Controller.action_delete();
+					break;
+				case 5:
+					Controller.action_sort();
+					break;
+				case 6:
+					Controller.action_swap();
+					break;
+				case 7:
+					Controller.action_search();
+					break;
+				case 8:
+					System.out.println("\n--- Bye ---");
+					System.exit(0);
+					break;
 			}
 		}
 	}
