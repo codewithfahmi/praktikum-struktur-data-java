@@ -37,7 +37,7 @@ class Form {
 	private final String warning_msg_float = "must be decimal number";
 
 	// Validation rules
-	private final String integer_rule = "\\d+";
+	private final String integer_rule = "^-?\\d+$";
 	private final String string_only_rule = "[a-zA-Z]+";
 	private final String string_rule = "^[a-zA-Z0-9\\s.,@#$%^&*()_+]+$";
 	private final String float_rule = "^[+-]?([0-9]*[.])?[0-9]+$";
@@ -469,10 +469,17 @@ class Controller {
 
 		while (true) {
 			Util.__("Tambah Data");
-			Util.__e(Env.insert_delete_menu);
+			Util.__e(Env.insert_delete_menu, true);
 
 			menu_option = Form.input("pilih").to_int();
-			Util.__("mahasiswa [" + App.mahasiswa.length + "]");
+
+			if (menu_option == 0)
+				break;
+
+			int mahasiswa_length = App.mahasiswa.length == 0
+					? 0
+					: App.mahasiswa.length + 1;
+			Util.__("mahasiswa [" + mahasiswa_length + "]");
 			switch (menu_option) {
 				// Prepend operation
 				case 1:
@@ -520,9 +527,12 @@ class Controller {
 		int menu_option = 0;
 		while (true) {
 			Util.__("Hapus Data");
-			Util.__e(Env.insert_delete_menu);
+			Util.__e(Env.insert_delete_menu, true);
 
 			menu_option = Form.input("pilih").to_int();
+
+			if (menu_option == 0)
+				break;
 
 			switch (menu_option) {
 				// Shift operation
@@ -576,28 +586,37 @@ class Controller {
 		} else {
 			while (true) {
 				Util.__("Edit Data");
+				System.out.println("[*] Ketik -1 untuk kembali");
 				int index = 0;
 				while (true) {
 					index = Form.input("index").to_int();
-					if (index > (App.mahasiswa.length - 1) || index < 0) {
+					if (index == -1)
+						break;
+
+					if (index > (App.mahasiswa.length - 1)) {
 						System.out.println("[!] index must be between 0 - " + (App.mahasiswa.length - 1));
 					} else {
 						break;
 					}
 				}
-				Mahasiswa mahasiswa = App.mahasiswa[index];
-				Util.__("Data Sekarang");
-				System.out.println(String.format("%-10s : %s", "nama", mahasiswa.nama));
-				System.out.println(String.format("%-10s : %s", "alamat", mahasiswa.alamat));
-				System.out.println(String.format("%-10s : %d", "umur", mahasiswa.umur));
-				System.out.println(String.format("%-10s : %s", "gender", mahasiswa.gender));
-				System.out.println(String.format("%-10s : %s", "hobi", String.join(", ", mahasiswa.hobi)));
-				System.out.println(String.format("%-10s : %s", "ipk", mahasiswa.ipk));
 
-				Util.__("Ubah data sekarang");
-				App.mahasiswa[index] = new Controller().__form();
+				if (index != -1) {
+					Mahasiswa mahasiswa = App.mahasiswa[index];
+					Util.__("Data Sekarang");
+					System.out.println(String.format("%-10s : %s", "nama", mahasiswa.nama));
+					System.out.println(String.format("%-10s : %s", "alamat", mahasiswa.alamat));
+					System.out.println(String.format("%-10s : %d", "umur", mahasiswa.umur));
+					System.out.println(String.format("%-10s : %s", "gender", mahasiswa.gender));
+					System.out.println(String.format("%-10s : %s", "hobi", String.join(", ", mahasiswa.hobi)));
+					System.out.println(String.format("%-10s : %s", "ipk", mahasiswa.ipk));
 
-				if (Util.continue_prompt() == 'n') {
+					Util.__("Ubah data sekarang");
+					App.mahasiswa[index] = new Controller().__form();
+
+					if (Util.continue_prompt() == 'n') {
+						break;
+					}
+				} else {
 					break;
 				}
 			}
@@ -613,7 +632,7 @@ class Controller {
 			System.out.println("\n[!] There is no data to sort");
 		} else {
 			Util.__("Urutkan Data");
-			Util.__e(Env.sort_menu);
+			Util.__e(Env.sort_menu, true);
 			int menu_option = Form.input("pilih").to_int();
 			switch (menu_option) {
 				case 1:
@@ -635,8 +654,11 @@ class Controller {
 
 		while (true) {
 			Util.__("Cari Data");
-			Util.__e(Env.search_menu);
+			Util.__e(Env.search_menu, true);
 			menu_option = Form.input("pilih").to_int();
+			if (menu_option == 0)
+				break;
+
 			switch (menu_option) {
 				case 1:
 					keyword = Form.input("keyword").to_string();
@@ -648,14 +670,18 @@ class Controller {
 					break;
 			}
 
-			if (result != null) {
-				Util.__(String.format("\n[*] Search completed (%d records found)", result.length));
-				Record.show(result);
-			} else {
-				System.out.println("[!] There is no data to display");
-			}
+			if (menu_option != -1) {
+				if (result != null) {
+					Util.__(String.format("\n[*] Search completed (%d records found)", result.length));
+					Record.show(result);
+				} else {
+					System.out.println("[!] There is no data to display");
+				}
 
-			if (Util.continue_prompt() == 'n') {
+				if (Util.continue_prompt() == 'n') {
+					break;
+				}
+			} else {
 				break;
 			}
 		}
@@ -669,7 +695,10 @@ class Controller {
 
 			// Get "source index"
 			while (true) {
+				System.out.println("[*] Ketik -1 untuk kembali");
 				from_index = Form.input("index source").to_int();
+				if (from_index == -1)
+					break;
 				if (from_index > App.mahasiswa.length - 1 || from_index < 0) {
 					System.out.println("[!] \"index source\" must be between 0 - " + (App.mahasiswa.length - 1));
 				} else {
@@ -677,21 +706,25 @@ class Controller {
 				}
 			}
 
-			// Get "target index"
-			while (true) {
-				to_index = Form.input("index target").to_int();
-				if (to_index > App.mahasiswa.length - 1 || to_index < 0) {
-					System.out.println("[!] \"index target\" must be between 0 - " + (App.mahasiswa.length - 1));
-				} else if (to_index == from_index) {
-					System.out.println("[!] source and target index cannot be the same");
-				} else {
+			if (from_index != -1) {
+				// Get "target index"
+				while (true) {
+					to_index = Form.input("index target").to_int();
+					if (to_index > App.mahasiswa.length - 1 || to_index < 0) {
+						System.out.println("[!] \"index target\" must be between 0 - " + (App.mahasiswa.length - 1));
+					} else if (to_index == from_index) {
+						System.out.println("[!] source and target index cannot be the same");
+					} else {
+						break;
+					}
+				}
+
+				App.mahasiswa = Record.swap(App.mahasiswa, from_index, to_index);
+
+				if (Util.continue_prompt() == 'n') {
 					break;
 				}
-			}
-
-			App.mahasiswa = Record.swap(App.mahasiswa, from_index, to_index);
-
-			if (Util.continue_prompt() == 'n') {
+			} else {
 				break;
 			}
 		}
@@ -703,9 +736,12 @@ class Util {
 		System.out.println(String.format("\n%s\n%s", text, "-".repeat(text.length())));
 	}
 
-	public static void __e(String[] list) {
+	public static void __e(String[] list, boolean show_back_menu) {
+		String format = "[%d]  %s";
 		for (int i = 0; i < list.length; i++)
-			System.out.println(String.format("[%d]  %s", (i + 1), list[i]));
+			System.out.println(String.format(format, (i + 1), list[i]));
+		if (show_back_menu)
+			System.out.println(String.format(format, 0, "Kembali"));
 	}
 
 	public static char continue_prompt() {
@@ -736,7 +772,7 @@ public class App {
 	public static void main(String[] args) {
 		while (true) {
 			Util.__("Database Mahasiswa");
-			Util.__e(Env.menu);
+			Util.__e(Env.menu, false);
 			menu_option = Form.input("pilih").to_int();
 
 			switch (menu_option) {
@@ -762,7 +798,7 @@ public class App {
 					Controller.action_search();
 					break;
 				case 8:
-					System.out.println("\n--- Bye ---");
+					System.out.println("\n[*] Anda telah keluar dari aplikasi");
 					System.exit(0);
 					break;
 			}
