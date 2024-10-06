@@ -8,4 +8,4 @@
 Bahasa pemrograman **Java** merupakan bahasa pemrograman pengantar untuk beberapa mata kuliah seperti **pemrograman dasar**, **pemrograman lanjut**, **struktur data** dan **pemrograman berbasis objek**.
 
 ### Tools
-Untuk mengerjakan praktikum struktur data, saya menggunakan **Visual Studio Code** sebagai Text Editor utama dan ekstensi **Extension Pack for Java**
+Untuk mengerjakan praktikum struktur data, saya menggunakan **Visual Studio Code** atau jika bosan saya menggunakan Intellij IDEA CE.
