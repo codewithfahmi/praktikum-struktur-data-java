@@ -37,10 +37,16 @@ public class MahasiswaController {
       Util.banner(Env.app_insert_label, Env.app_insert_menu, true);
       int record_length = recordController.length() + 1;
 
-      switch(Form.input(Env.app_option_label).required().minmax(0, Env.app_insert_menu.length).to_integer()) {
+      switch(Form.input(Env.app_option_label)
+              .required()
+              .minmax(0, Env.app_insert_menu.length)
+              .to_integer()) {
         case 1 -> {
           Util.banner(Env.app_prepend_op_label + record_length);
-          recordController.refresh(recordController.prepend(recordController.all(), __form()));
+          recordController.refresh(recordController.prepend(
+              recordController.all(),
+              __form()
+          ));
         }
         case 2 -> {
           Util.banner(Env.app_insert_op_label + record_length);
@@ -49,14 +55,19 @@ public class MahasiswaController {
           } else {
             recordController.refresh(recordController.insert(
                 recordController.all(),
-                Form.input(Env.app_index_label).minmax(0, recordController.length()).to_integer(),
+                Form.input(Env.app_index_label)
+                    .minmax(0, recordController.length())
+                    .to_integer(),
                 __form())
             );
           }
         }
         case 3 -> {
           Util.banner(Env.app_append_op_label + record_length);
-          recordController.refresh(recordController.append(recordController.all(), __form()));
+          recordController.refresh(recordController.append(
+              recordController.all(),
+              __form()
+          ));
         }
         case 0 -> { this.is_continue = false; }
       }
@@ -74,30 +85,15 @@ public class MahasiswaController {
       System.out.println(Env.app_delete_empty_record);
     } else {
       while (this.is_continue) {
-        // Menampilkan banner (title dan menu) untuk fitur delete
         Util.banner(Env.app_delete_label, new String[] { "by position", "by keyword"}, true);
-
-        /**
-         * Menampilkan prompt agar user dapat memasukkan pilihan (1 atau 2)
-         *  1. Delete by Position
-         *     User dapat menghapus data dengan memilih posisi index data.
-         *     Posisi index :
-         *           1. Shift (index pertama, 0)
-         *           2. Delete (Antara 0 sampai index terakhir)
-         *           3. Pop (Index terakhir)
-         *  2. Delete by Keyword
-         *     User dapat menghapus data dengan mencari terlebih dahulu data sesuai dengan kategori.
-         *     Kategori : name, address, age, gender, hobbies, gpa.
-         *     Prosesdur :
-         *          1. Apabila proses pencarian menghasilkan data yang dicari (satu ataupun banyak), maka akan dilakukan
-         *             penghapusan data.
-         *          2. Apabila proses pencarian tidak menghasilkan apapun, maka proses penghapusan tidak terjadi.
-         */
         switch (Form.input(Env.app_option_label).required().minmax(0, 2).to_integer()) {
-          // Delete by Position
           case 1 -> {
             Util.banner("(delete by position)", Env.app_delete_menu, true);
-            switch (Form.input(Env.app_option_label).required().minmax(0, Env.app_delete_menu.length).to_integer()) {
+            switch (Form.input(Env.app_option_label)
+                        .required()
+                        .minmax(0, Env.app_delete_menu.length)
+                        .to_integer()
+            ) {
               case 1 -> {
                 Util.banner(Env.app_shift_op_label);
                 recordController.refresh(recordController.shift(recordController.all()).results);
@@ -108,22 +104,28 @@ public class MahasiswaController {
                     recordController.all(),
                     Form.input(Env.app_index_label)
                         .required()
-                        .minmax(0, recordController.length()).to_integer()).results);
+                        .minmax(0, recordController.length())
+                        .to_integer()
+                  ).results
+                );
               }
               case 3 -> {
                 Util.banner(Env.app_pop_op_label);
-                recordController.refresh(recordController.pop(recordController.all()).results);
+                recordController.refresh(recordController.pop(
+                    recordController.all()
+                  ).results
+                );
               }
               case 0 -> { this.is_continue = false; }
             }
           }
-
-          // Delete by keyword
           case 2 -> {
             Util.banner("delete by keyword");
             Util.banner("select category", Env.app_table_columns, true);
-            int category = Form.input("category").required().minmax(0, Env.app_table_columns.length).to_integer();
-
+            int category = Form.input("category")
+                               .required()
+                               .minmax(0, Env.app_table_columns.length)
+                               .to_integer();
             if(category == 0) {
               this.is_continue = false;
             } else {
@@ -131,7 +133,8 @@ public class MahasiswaController {
               RecordController.SearchResult result = recordController.linear_search(
                   recordController.all(),
                   Env.app_table_columns[category - 1],
-                  keyword);
+                  keyword
+              );
               MahasiswaModel[] data_result = result.results;
               int[] indexes = result.indexes;
 
@@ -141,7 +144,10 @@ public class MahasiswaController {
                 Util.banner(String.format("(%d data will be deleted)", indexes.length));
                 recordController.show(data_result);
                 for (int i = indexes.length - 1;i >= 0;i--) {
-                  RecordController.DeleteResult delete = recordController.delete(recordController.all(), indexes[i]);
+                  RecordController.DeleteResult delete = recordController.delete(
+                      recordController.all(),
+                      indexes[i]
+                  );
                   recordController.refresh(delete.results);
                 }
               }
@@ -165,7 +171,10 @@ public class MahasiswaController {
     } else {
       while(this.is_continue) {
         Util.banner(Env.app_edit_label);
-        int index = Form.input(Env.app_index_label).required().minmax(0, recordController.length() - 1).to_integer();
+        int index = Form.input(Env.app_index_label)
+                        .required()
+                        .minmax(0, recordController.length() - 1)
+                        .to_integer();
         MahasiswaModel current = recordController.all()[index];
 
         Util.banner(Env.app_update_cur_label + index);
@@ -195,13 +204,21 @@ public class MahasiswaController {
       while(this.is_continue) {
         Util.banner(Env.app_swap_op_label);
         int record_length     = recordController.length() - 1;
-        int source_index      = Form.input(Env.app_swap_source_label).required().minmax(0, record_length).to_integer();
-        int destination_index = Form.input(Env.app_swap_dest_label).required().minmax(0, record_length).to_integer();
-
+        int source_index      = Form.input(Env.app_swap_source_label)
+                                    .required()
+                                    .minmax(0, record_length)
+                                    .to_integer();
+        int destination_index = Form.input(Env.app_swap_dest_label)
+                                    .required()
+                                    .minmax(0, record_length)
+                                    .to_integer();
         if (source_index == destination_index) {
           System.out.println(Env.app_swap_index_warning);
         } else {
-          recordController.refresh(recordController.swap(source_index, destination_index));
+          recordController.refresh(recordController.swap(
+                  source_index,
+                  destination_index
+          ));
         }
 
         if (!this.is_continue) break; this.is_continue = Util.confirmation_prompt();
@@ -218,14 +235,37 @@ public class MahasiswaController {
       System.out.println(Env.app_sort_empty_record);
     } else {
       while (this.is_continue) {
-        Util.banner(Env.app_sort_op_label, Env.app_sort_menu, true);
-        switch (Form.input(Env.app_option_label).required().minmax(0, Env.app_sort_menu.length).to_integer()) {
-          case 1:
-            break;
-          case 0:
-            this.is_continue = false;
-            break;
+        Util.banner(Env.app_sort_label);
+        int category = 0;
+        int algorithm = 0;
+
+        Util.banner("select category", Env.app_table_columns, true);
+        category = Form.input("category")
+                       .required()
+                       .minmax(0, Env.app_table_columns.length)
+                       .to_integer();
+        if (category == 0) {
+          this.is_continue = false;
+        } else {
+          Util.banner("select algorithm", Env.app_sort_menu, true);
+          String prop = Env.app_table_columns[category - 1];
+          algorithm = Form.input("algorithm")
+                          .required()
+                          .minmax(0, Env.app_sort_menu.length)
+                          .to_integer();
+          switch (algorithm) {
+            case 1 -> recordController.refresh(recordController.bubble_sort(
+                          recordController.all(),
+                          prop
+                      ));
+            case 2 -> recordController.refresh(recordController.selection_sort(
+                          recordController.all(),
+                          prop
+                      ));
+            case 0 -> { this.is_continue = false; }
+          }
         }
+
         if (!this.is_continue) break; this.is_continue = Util.confirmation_prompt();
       }
       this.is_continue = true;

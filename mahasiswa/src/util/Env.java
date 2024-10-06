@@ -6,6 +6,7 @@ public class Env {
     public static String    app_delete_label         = "hapus data mahasiswa";
     public static String    app_edit_label           = "edit data mahasiswa";
     public static String    app_search_label         = "cari data mahasiswa";
+    public static String    app_sort_label           = "urutkan data mahasiswa";
     public static String    app_option_label         = "option";
     public static String    app_index_label          = "index";
     public static String    app_swap_source_label    = "source index";
@@ -19,7 +20,6 @@ public class Env {
     public static String    app_delete_op_label      = "(delete)";
     public static String    app_pop_op_label         = "(pop)";
     public static String    app_swap_op_label        = "(swap)";
-    public static String    app_sort_op_label        = "(sort)";
     public static String    app_linear_op_label      = "(linear search)";
     public static String    app_binary_op_label      = "(binary search)";
     public static String    app_delete_empty_record  = "*) there is no data to delete";

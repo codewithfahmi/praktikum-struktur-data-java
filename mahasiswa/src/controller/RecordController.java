@@ -363,6 +363,90 @@ public class RecordController {
     return result;
   }
 
+  /**
+   * Method untuk mengurutkan data menggunakan algoritma "bubble sort"
+   *
+   * @param record Rekaman data utama
+   * @param prop Property pada kelas model dan kategori pengurutan data
+   * @return Rekaman data utama
+   * @param <T> String, Float, Integer, Character
+   */
+  @SuppressWarnings("unchecked")
+  public <T> MahasiswaModel[] bubble_sort(MahasiswaModel[] record, String prop) {
+    long start_time = System.nanoTime();
+    int record_length = record.length - 1;
+    for (int i = 0; i <= record_length - 1; i++) {
+      boolean swapped = false;
+      for (int j = 0; j <= record_length - 1 - i; j++) {
+        T current, next = null;
+        int comparison  = 0;
+
+        if (prop.equals("hobbies")) {
+          current = (T) String.join(", ", (String[]) this.value_from_model_prop(prop, record[j]));
+          next = (T) String.join(", ", (String[]) this.value_from_model_prop(prop, record[j + 1]));
+        } else {
+          current = this.value_from_model_prop(prop, record[j]);
+          next = this.value_from_model_prop(prop, record[j + 1]);
+        }
+
+        if (current instanceof String && next instanceof String) {
+          comparison = current.toString().compareTo(next.toString());
+        } else if (current instanceof Float && next instanceof Float) {
+          comparison = ((Float) current).compareTo((Float) next);
+        } else if (current instanceof Character && next instanceof Character) {
+          comparison = ((Character) current).compareTo((Character) next);
+        } else if (current instanceof Integer && next instanceof Integer) {
+          comparison = ((Integer) current).compareTo((Integer) next);
+        }
+
+        if (comparison > 0) {
+          MahasiswaModel cell = record[j];
+          record[j] = record[j + 1];
+          record[j + 1] = cell;
+          swapped = true;
+        }
+      }
+
+      if (!swapped) break;
+    }
+    long end_time = System.nanoTime();
+    Util.operation_time(this.getClass().getSimpleName(),
+                        new Object(){}.getClass().getEnclosingMethod().getName(),
+                        start_time,
+                        end_time);
+    this.show(record);
+    return record;
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T> MahasiswaModel[] selection_sort(MahasiswaModel[] record, String prop) {
+    long start_time   = System.nanoTime();
+    int record_length = record.length;
+    for (int i = 0;i < record_length - 1;i++) {
+      int min_index = i;
+      for (int j = i + 1;j < record_length;j++) {
+        T current, next = null;
+        int comparison  = 0;
+
+        if (prop.equals("hobbies")) {
+          current = (T) String.join(", ", (String[]) value_from_model_prop(prop, record[j]));
+          next = (T) String.join(", ", (String[]) value_from_model_prop(prop, record[min_index]));
+        } else {
+          current = value_from_model_prop(prop, record[j]);
+          next = value_from_model_prop(prop, record[min_index]);
+        }
+
+
+      }
+    }
+    long end_time     = System.nanoTime();
+    Util.operation_time(this.getClass().getSimpleName(),
+                            new Object(){}.getClass().getEnclosingMethod().getName(),
+                            start_time,
+                            end_time);
+    return record;
+  }
+
 
   /**
    * Method untuk menampilkan data rekaman utama dengan format table

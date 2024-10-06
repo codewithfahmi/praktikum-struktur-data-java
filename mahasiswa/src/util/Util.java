@@ -10,7 +10,9 @@ public class Util {
 
     public static void banner(String s, String[] menu, boolean back) {
         Util.banner(s);
-        for (int i = 0; i < menu.length; i++) System.out.printf("%d. %s\n", (i + 1), menu[i]);
+        for (int i = 0; i < menu.length; i++) {
+            System.out.printf("%d. %s\n", (i + 1), menu[i]);
+        }
         if (back) System.out.println("0. back");
     }
 
