@@ -277,6 +277,7 @@ public class RecordController {
         is_match = val.toString().toLowerCase().contains(keyword.toString().toLowerCase());
       }
 
+
       if (is_match) {
         temp = this.append(temp, record[i]);
         indexes_temp.append(i);
