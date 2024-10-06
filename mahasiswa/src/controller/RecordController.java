@@ -389,13 +389,13 @@ public class RecordController {
           next = this.value_from_model_prop(prop, record[j + 1]);
         }
 
-        if (current instanceof String && next instanceof String) {
+        if (current instanceof String           && next instanceof String) {
           comparison = current.toString().compareTo(next.toString());
-        } else if (current instanceof Float && next instanceof Float) {
+        } else if (current instanceof Float     && next instanceof Float) {
           comparison = ((Float) current).compareTo((Float) next);
         } else if (current instanceof Character && next instanceof Character) {
           comparison = ((Character) current).compareTo((Character) next);
-        } else if (current instanceof Integer && next instanceof Integer) {
+        } else if (current instanceof Integer   && next instanceof Integer) {
           comparison = ((Integer) current).compareTo((Integer) next);
         }
 
@@ -418,6 +418,14 @@ public class RecordController {
     return record;
   }
 
+  /**
+   * Method untuk mengurutkan data menggunakan algoritma "selection sort"
+   *
+   * @param record Rekaman data utama
+   * @param prop Property pada kelas model dan kategori pengurutan data
+   * @return Rekaman data utama
+   * @param <T> String, Float, Integer, Character
+   */
   @SuppressWarnings("unchecked")
   public <T> MahasiswaModel[] selection_sort(MahasiswaModel[] record, String prop) {
     long start_time   = System.nanoTime();
@@ -436,14 +444,87 @@ public class RecordController {
           next = value_from_model_prop(prop, record[min_index]);
         }
 
+        if (current instanceof String           && next instanceof String) {
+          comparison = current.toString().compareTo(next.toString());
+        } else if (current instanceof Float     && next instanceof Float) {
+          comparison = ((Float) current).compareTo((Float) next);
+        } else if (current instanceof Character && next instanceof Character) {
+          comparison = ((Character) current).compareTo((Character) next);
+        } else if (current instanceof Integer   && next instanceof Integer) {
+          comparison = ((Integer) current).compareTo((Integer) next);
+        }
 
+        if (comparison < 0) {
+          min_index = j;
+        }
+
+        MahasiswaModel cell = record[min_index];
+        record[min_index] = record[i];
+        record[i] = cell;
       }
     }
     long end_time     = System.nanoTime();
     Util.operation_time(this.getClass().getSimpleName(),
-                            new Object(){}.getClass().getEnclosingMethod().getName(),
-                            start_time,
-                            end_time);
+                        new Object(){}.getClass().getEnclosingMethod().getName(),
+                        start_time,
+                        end_time);
+    this.show(record);
+    return record;
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T> MahasiswaModel[] insertion_sort(MahasiswaModel[] record, String prop) {
+    long start_time   = System.nanoTime();
+    int record_length = record.length;
+    for (int i = 1;i < record_length;i++) {
+      int j = i - 1;
+      T key;
+
+      if (prop.equals("hobbies")) {
+        key = (T) String.join(", ", (String[]) value_from_model_prop(prop, record[i]));
+      } else {
+        key = value_from_model_prop(prop, record[i]);
+      }
+
+      MahasiswaModel tmp = record[i];
+
+      while (j >= 0) {
+        T current;
+
+        if (prop.equals("hobbies")) {
+          current = (T) String.join(", ", (String[]) value_from_model_prop(prop, record[j]));
+        } else {
+          current = value_from_model_prop(prop, record[j]);
+        }
+
+        int comparison = 0;
+
+        if (current instanceof String           && key instanceof String) {
+          comparison = current.toString().compareTo(key.toString());
+        } else if (current instanceof Float     && key instanceof Float) {
+          comparison = ((Float) current).compareTo((Float) key);
+        } else if (current instanceof Character && key instanceof Character) {
+          comparison = ((Character) current).compareTo((Character) key);
+        } else if (current instanceof Integer   && key instanceof Integer) {
+          comparison = ((Integer) current).compareTo((Integer) key);
+        }
+
+        if (comparison > 0) {
+          record[j + 1] = record[j];
+          j--;
+        } else {
+          break;
+        }
+      }
+
+      record[j + 1] = tmp;
+    }
+    long end_time     = System.nanoTime();
+    Util.operation_time(this.getClass().getSimpleName(),
+                        new Object(){}.getClass().getEnclosingMethod().getName(),
+                        start_time,
+                        end_time);
+    this.show(record);
     return record;
   }
 

@@ -254,14 +254,27 @@ public class MahasiswaController {
                           .minmax(0, Env.app_sort_menu.length)
                           .to_integer();
           switch (algorithm) {
-            case 1 -> recordController.refresh(recordController.bubble_sort(
-                          recordController.all(),
-                          prop
-                      ));
-            case 2 -> recordController.refresh(recordController.selection_sort(
-                          recordController.all(),
-                          prop
-                      ));
+            case 1 -> {
+              Util.banner("(bubble sort)");
+              recordController.refresh(recordController.bubble_sort(
+                      recordController.all(),
+                      prop
+              ));
+            }
+            case 2 -> {
+              Util.banner("(selection sort)");
+              recordController.refresh(recordController.selection_sort(
+                      recordController.all(),
+                      prop
+              ));
+            }
+            case 3 -> {
+              Util.banner("(insertion sort)");
+              recordController.refresh(recordController.insertion_sort(
+                      recordController.all(),
+                      prop
+              ));
+            }
             case 0 -> { this.is_continue = false; }
           }
         }
