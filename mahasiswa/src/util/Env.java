@@ -1,0 +1,46 @@
+package util;
+
+public class Env {
+    public static String    app_title                = "data mahasiswa";
+    public static String    app_insert_label         = "tambah data mahasiswa";
+    public static String    app_delete_label         = "hapus data mahasiswa";
+    public static String    app_edit_label           = "edit data mahasiswa";
+    public static String    app_search_label         = "cari data mahasiswa";
+    public static String    app_option_label         = "option";
+    public static String    app_index_label          = "index";
+    public static String    app_swap_source_label    = "source index";
+    public static String    app_swap_dest_label      = "destination index";
+    public static String    app_prepend_op_label     = "(prepend) mahasiswa - ";
+    public static String    app_insert_op_label      = "(insert) mahasiswa - ";
+    public static String    app_append_op_label      = "(append) mahasiswa - ";
+    public static String    app_update_cur_label     = "(current data) mahasiswa - ";
+    public static String    app_update_upd_label     = "(update data) mahasiswa - ";
+    public static String    app_shift_op_label       = "(shift)";
+    public static String    app_delete_op_label      = "(delete)";
+    public static String    app_pop_op_label         = "(pop)";
+    public static String    app_swap_op_label        = "(swap)";
+    public static String    app_sort_op_label        = "(sort)";
+    public static String    app_linear_op_label      = "(linear search)";
+    public static String    app_binary_op_label      = "(binary search)";
+    public static String    app_delete_empty_record  = "*) there is no data to delete";
+    public static String    app_edit_empty_record    = "*) there is no data to edit";
+    public static String    app_insert_empty_record  = "*) \"insert\" is switched to \"prepend\" because storage is empty";
+    public static String    app_swap_empty_record    = "*) there is no data to swap";
+    public static String    app_sort_empty_record    = "*) there is no data to sort";
+    public static String[]  app_menu                 = {"insert", "view", "delete", "update", "sort", "swap", "search", "exit"};
+    public static String[]  app_insert_menu          = {"prepend", "insert", "append"};
+    public static String[]  app_delete_menu          = {"shift", "delete", "pop"};
+    public static String[]  app_sort_menu            = {"bubble", "selection", "insertion"};
+    public static String[]  app_search_menu          = {"linear", "binary"};
+    public static String[]  app_table_columns        = {"name", "address", "age", "gender", "hobbies", "gpa"};
+    public static int[]     app_table_columns_length = {25, 25, 8, 12, 30, 8};
+    public static String    app_form_regex_int       = "^-?\\d+$";
+    public static String    app_form_regex_float     = "^-?\\d*\\.?\\d+$";
+    public static String    app_form_regex_string    = "^[a-zA-Z0-9!@#$%^&*()_+\\-={}\\[\\]:;'\"<>,.?\\/\\s]+$";
+    public static String    app_form_regex_alfabet   = "^[a-zA-Z\\s]+$";
+    public static String    app_form_string_warning  = "must be only string";
+    public static String    app_form_alfabet_warning = "must be only a - z or A - Z";
+    public static String    app_swap_index_warning   = "*) the source and destination index cannot be the same";
+    public static String    app_form_int_warning     = "must be only integer";
+    public static String    app_form_float_warning   = "must be only float";
+}
