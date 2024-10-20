@@ -1,6 +1,6 @@
 import controller.MahasiswaController;
 
-public class Main {
+public class Main { 
     public static void main(String[] args) {
         MahasiswaController mahasiswaController = new MahasiswaController();
         while(true) {
