@@ -9,12 +9,34 @@ public class SingleLinkedList<T> {
 			this.data = item;
 			this.next = null;
 		}
+
+		@Override
+		public String toString() {
+			return this.data.toString();
+		}
 	}
 
 	private Node<T> head;
 
 	public SingleLinkedList() {
 		this.head = null;
+	}
+
+	public T get(int index) {
+		T item = null;
+		Node<T> current = this.head;
+		int position = 0;
+
+		while (current != null) {
+			if (position == index) {
+				item = current.data;
+				break;
+			}
+			current = current.next;
+			position++;
+			System.out.printf("%d | %s\n", position, current.data.toString());
+		}
+		return item;
 	}
 
 	public void add(T item, int index) {
@@ -28,26 +50,22 @@ public class SingleLinkedList<T> {
 			return;
 		}
 
-		if (index == this.size()) {
+		if (index == this.size() - 1) {
 			this.addLast(item);
 			return;
 		}
 
-		Node<T> node = new Node<>(item);
 		Node<T> current = this.head;
-		int count = 0;
-
-		while (current != null && count < index - 1) {
+		for (int i = 0;i < index - 1 && current != null;i++) {
 			current = current.next;
-			count++;
 		}
 
 		if (current == null) {
-			System.err.println("[WARN] index must be in range from 0 to " + this.size());
-			return;
+			System.out.println("[WARN] out of bound!");
 		}
 
-		node.next = this.head;
+		Node<T> node = new Node<>(item);
+		node.next = current.next;
 		current.next = node;
 	}
 
@@ -148,13 +166,10 @@ public class SingleLinkedList<T> {
 	}
 
 	public void display() {
-		Node<T> current = this.head;
-		int index = 0;
-		while (current != null) {
-			System.out.printf("%d : %s\n", index, current.data.toString());
-			current = current.next;
-			index++;
+		int position = 0;
+		while(position < this.size()) {
+			System.out.println(this.get(position));
+			position++;
 		}
-		System.out.println();
 	}
 }
